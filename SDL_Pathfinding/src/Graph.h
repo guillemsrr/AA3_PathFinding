@@ -8,13 +8,27 @@ public:
 	Graph(std::vector<std::vector<int>> *terrain);
 	~Graph();
 
-	struct Node
+	class Node
 	{
+	public:
 		int row;
 		int column;
 		std::vector<Node*> adjacencyList;
+
+		Node()
+		{
+			row = -1;
+			column = -1;
+		};
+
+		Node(int r, int c)
+		{
+			row = r;
+			column = c;
+			adjacencyList = empty;
+		};
 	};
-	struct Edge
+	class Edge
 	{
 		int weight=1;
 		Node* from_node;
@@ -22,9 +36,9 @@ public:
 	};
 
 	//std::vector< std::vector<Graph::Node*> > nodesList;
-	Node*** nodesList;
+	Node** nodesList;
 	std::map<std::pair<Node*, Node*>,Edge*> edgesList;
-	std::vector<Graph::Node*> empty;
+	static std::vector<Graph::Node*> empty;
 
 	void CheckAndConnectNeighbor(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
 	void CreateConnection(Node* node1, Node* node2, int weight);

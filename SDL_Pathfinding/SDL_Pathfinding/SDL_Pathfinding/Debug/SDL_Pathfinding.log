@@ -1,5 +1,3 @@
-﻿  Graph.cpp
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(9): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(14): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(16): warning C4018: '<': signed/unsigned mismatch
-  SDL_Pathfinding.vcxproj -> G:\GUILLEM\Documents\Programming_Projects\Intel·ligència artificial\AA3_PathFinding\SDL_Pathfinding\\bin\SDL_Pathfinding.exe
+﻿  Exercise1Scene.cpp
+c:\users\alumno\documents\_guillemserra\aa3_pathfinding\sdl_pathfinding\src\exercise1scene.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SDL_Pathfinding.vcxproj -> C:\Users\alumno\Documents\_guillemserra\AA3_PathFinding\SDL_Pathfinding\\bin\SDL_Pathfinding.exe

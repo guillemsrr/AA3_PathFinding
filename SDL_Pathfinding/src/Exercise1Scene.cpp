@@ -38,7 +38,7 @@ Exercise1Scene::Exercise1Scene(bool weight)
 
 	if (weight)
 	{
-		CreateRandomWeights();//and then create the weights
+		//CreateRandomWeights();//and then create the weights
 	}
 	
 	m_graph = new Graph(&terrain);

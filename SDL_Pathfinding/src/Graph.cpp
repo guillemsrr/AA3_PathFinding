@@ -5,10 +5,10 @@
 Graph::Graph(std::vector<std::vector<int>> *terrain)
 {
 	//initialize nodesList:
-	nodesList = new Node**[terrain->size()];
+	nodesList = new Node*[terrain->size()];
 	for (int i = 0; i < terrain->size(); ++i)
 	{
-		nodesList[i] = new Node*[terrain[i].size()];
+		nodesList[i] = new Node[terrain[i].size()];
 	}
 
 	for (int i = 0; i < terrain->size(); i++)//rows
@@ -17,9 +17,9 @@ Graph::Graph(std::vector<std::vector<int>> *terrain)
 		{
 			if (&terrain[i][j] != 0)
 			{
-				if (!nodesList[i][j])//create node if it doesn't exist
+				if (nodesList[i][j].row == -1 && nodesList[i][j].column == -1)//create node if it doesn't exist
 				{
-					Graph::Node* node = new Graph::Node{ i,j,empty };
+					Graph::Node node = Graph::Node( i,j);
 					nodesList[i][j] = node;
 				}
 
@@ -54,7 +54,7 @@ void Graph::CheckAndConnectNeighbor(int i, int j, int ni, int nj, std::vector<st
 	int w = (terrain->at(i + ni)).at(j + nj);
 	if (w != 0)
 	{
-		if (!nodesList[i + ni][j + nj])
+		if (nodesList[i + ni][j + nj] )
 		{
 			Graph::Node *node = new Graph::Node{ i + ni,j + nj,empty };
 			nodesList[i + ni][j + nj] = node;
