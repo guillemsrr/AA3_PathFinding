@@ -41,9 +41,11 @@ private:
 	bool loadTextures(char* filename_bg, char* filename_coin);
 
 	//New Code
+	void init();
 	Graph* m_graph;
 	const int MAX_WEIGHT = 5;
 	const int MIN_WEIGHT = 1;
 	void CreateRandomWeights();
+	void CreateSpecificWeights();
 };
 

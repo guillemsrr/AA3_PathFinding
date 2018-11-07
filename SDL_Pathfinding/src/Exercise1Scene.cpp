@@ -4,6 +4,11 @@
 
 Exercise1Scene::Exercise1Scene()
 {
+	init();
+}
+
+void Exercise1Scene::init()
+{
 	std::srand(1);//seed is set to 1
 
 	draw_grid = false;
@@ -34,11 +39,11 @@ Exercise1Scene::Exercise1Scene()
 
 Exercise1Scene::Exercise1Scene(bool weight)
 {
-	Exercise1Scene::Exercise1Scene();//we call the other constructor
+	init();
 
 	if (weight)
 	{
-		//CreateRandomWeights();//and then create the weights
+		CreateRandomWeights();//and then create the weights
 	}
 	
 	m_graph = new Graph(&terrain);
@@ -74,7 +79,7 @@ void Exercise1Scene::update(float dtime, SDL_Event *event)
 	Vector2D steering_force = agents[0]->Behavior()->SimplePathFollowing(agents[0], dtime);
 	agents[0]->update(steering_force, dtime, event);
 
-	// if we have arrived to the coin, replace it in a random cell!
+	// if we have arrived to the coin, replace it ina random cell!
 	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
 	{
 		coinPosition = Vector2D(-1, -1);
@@ -139,7 +144,7 @@ void Exercise1Scene::drawMaze()
 		}
 	}
 	//Alternative: render a backgroud texture:
-	//SDL_RenderCopy(TheApp::Instance()->getRenderer(), background_texture, NULL, NULL );
+	//SDL_RenderCopy(TheApp::Instance()->getRenderer(), background_texture, NULL, NULL );s
 }
 
 void Exercise1Scene::drawCoin()
@@ -226,4 +231,17 @@ void Exercise1Scene::CreateRandomWeights()
 				terrain[i][j] = MIN_WEIGHT + rand() % (MAX_WEIGHT - MIN_WEIGHT + 1);
 		}
 	}
+}
+
+void Exercise1Scene::CreateSpecificWeights()
+{
+	terrain[num_cell_x / 2][num_cell_y / 2] = 4;
+	terrain[num_cell_x / 2 -1][num_cell_y / 2] = 2;
+	terrain[num_cell_x / 2 +1][num_cell_y / 2] = 2;
+	terrain[num_cell_x / 2 ][num_cell_y / 2 -1] = 2;
+	terrain[num_cell_x / 2 ][num_cell_y / 2 +1] = 2;
+	terrain[num_cell_x / 2 +1][num_cell_y / 2 +1] = 2;
+	terrain[num_cell_x / 2 -1][num_cell_y / 2 -1] = 2;
+	terrain[num_cell_x / 2 -1][num_cell_y / 2 +1] = 2;
+	terrain[num_cell_x / 2 +1][num_cell_y / 2 -1] = 2;
 }
