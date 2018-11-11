@@ -6,7 +6,7 @@ Node::Node()
 	heuristic = 0;
 }
 
-Node::Node(int h, int r, int c): heuristic(h), row(r), column(c)
+Node::Node(int r, int c, int h): row(r), column(c), heuristic(h)
 {
 
 }
@@ -15,10 +15,10 @@ Node::~Node()
 {
 }
 
-std::vector<Edge> Node::GetEdges()
-{
-	return std::vector<Edge>();
-}
+//std::vector<Edge> Node::GetEdges()
+//{
+//	return std::vector<Edge>();
+//}
 
 int Node::GetHeuristic()
 {

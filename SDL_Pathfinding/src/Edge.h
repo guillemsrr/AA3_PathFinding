@@ -2,6 +2,8 @@
 #include "Node.h"
 
 
+class Node;
+
 class Edge
 {
 public:

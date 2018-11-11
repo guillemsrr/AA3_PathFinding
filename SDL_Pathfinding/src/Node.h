@@ -3,14 +3,16 @@
 #include <vector>
 
 
+class Edge;
+
 class Node
 {
 public:
 	Node();
-	Node(int h, int r, int c);
+	Node(int r, int c, int h);
 	~Node();
 
-	std::vector<Edge> GetEdges();
+	//std::vector<Edge> GetEdges();
 
 	int GetHeuristic();
 	void SetHeuristic(int h);
@@ -20,7 +22,7 @@ public:
 
 private:
 	int heuristic;
-	std::vector<Edge> edges;
+	//std::vector<Edge> edges;
 	int row;
 	int column;
 };
