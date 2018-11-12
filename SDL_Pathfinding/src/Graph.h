@@ -2,6 +2,9 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include "SDL_SimpleApp.h"
+#include "Node.h"
+#include "Edge.h"
 
 class Graph
 {
@@ -9,48 +12,10 @@ public:
 	Graph(std::vector<std::vector<int>> *terrain);
 	~Graph();
 
-	class Node
-	{
-	public:
-		int row;
-		int column;
-		std::vector<Node*> adjacencyList;
+	int num_cell_x;
+	int	num_cell_y;
 
-		Node()
-		{
-			row = -1;
-			column = -1;
-		};
-
-		Node(int r, int c)
-		{
-			row = r;
-			column = c;
-		};
-	};
-	class Edge
-	{
-	public:
-		int weight=1;
-		Node* from_node;
-		Node* to_node;
-
-		Edge()
-		{
-			weight = 1;
-			from_node = nullptr;
-			to_node = nullptr;
-		}
-
-		Edge(Node* f, Node* t, int w)
-		{
-			from_node = f;
-			to_node = t;
-			weight = w;
-		}
-	};
-
-	//std::vector< std::vector<Graph::Node*> > nodesList;
+	std::vector< std::vector<Node*> > nodesList;
 	Node** nodeArray2D;
 	std::map<std::pair<int, int>, Node*> nodesMap;
 	std::map<std::pair<Node*, Node*>,Edge*> edgesMap;

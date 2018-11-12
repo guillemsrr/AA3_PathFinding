@@ -6,7 +6,7 @@
 #include <time.h>
 #include "Scene.h"
 #include "Agent.h"
-#include "PathFindingAlgorithms.h"
+#include "PathFinding.h"
 #include "Graph.h"
 
 class Exercise1Scene :

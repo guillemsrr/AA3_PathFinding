@@ -132,10 +132,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Agent.cpp" />
+    <ClCompile Include="..\src\Edge.cpp" />
     <ClCompile Include="..\src\Exercise1Scene.cpp" />
     <ClCompile Include="..\src\Graph.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\PathFindingAlgorithms.cpp" />
+    <ClCompile Include="..\src\Node.cpp" />
+    <ClCompile Include="..\src\PathFinding.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ScenePathFindingMouse.cpp" />
     <ClCompile Include="..\src\SDL_SimpleApp.cpp" />
@@ -144,10 +146,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Agent.h" />
+    <ClInclude Include="..\src\Edge.h" />
     <ClInclude Include="..\src\Exercise1Scene.h" />
     <ClInclude Include="..\src\Graph.h" />
+    <ClInclude Include="..\src\Node.h" />
     <ClInclude Include="..\src\Path.h" />
-    <ClInclude Include="..\src\PathFindingAlgorithms.h" />
+    <ClInclude Include="..\src\PathFinding.h" />
     <ClInclude Include="..\src\Scene.h" />
     <ClInclude Include="..\src\ScenePathFindingMouse.h" />
     <ClInclude Include="..\src\SteeringBehavior.h" />

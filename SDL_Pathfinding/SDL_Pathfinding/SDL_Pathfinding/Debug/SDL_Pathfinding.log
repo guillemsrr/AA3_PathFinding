@@ -1,9 +1,5 @@
 ﻿  Graph.cpp
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(17): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(22): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(24): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(50): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(52): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(63): warning C4018: '<': signed/unsigned mismatch
-g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(65): warning C4018: '<': signed/unsigned mismatch
+g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(92): warning C4018: '<': signed/unsigned mismatch
+g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(97): warning C4018: '<': signed/unsigned mismatch
+g:\guillem\documents\programming_projects\intel·ligència artificial\aa3_pathfinding\sdl_pathfinding\src\graph.cpp(99): warning C4018: '<': signed/unsigned mismatch
   SDL_Pathfinding.vcxproj -> G:\GUILLEM\Documents\Programming_Projects\Intel·ligència artificial\AA3_PathFinding\SDL_Pathfinding\\bin\SDL_Pathfinding.exe
