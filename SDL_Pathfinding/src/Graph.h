@@ -23,9 +23,10 @@ public:
 	void initNodesMap(std::vector<std::vector<int>> *terrain);
 	void initEdgesMap(std::vector<std::vector<int>> *terrain);
 	void CheckAndConnectNeighborNodeMap(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
-
+	void CreateConnection(Node* node1, Node* node2, int weight);
+	bool CheckNeighborExists(int i, int j);
+	//unused:
 	void initNodeArray2D(std::vector<std::vector<int>> *terrain);
 	void CheckAndConnectNeighborArray2D(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
-	void CreateConnection(Node* node1, Node* node2, int weight);
 };
 

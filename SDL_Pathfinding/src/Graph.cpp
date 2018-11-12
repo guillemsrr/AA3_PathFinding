@@ -18,71 +18,63 @@ Graph::Graph(std::vector<std::vector<int>> *terrain)
 	initEdgesMap(terrain);
 }
 
+Graph::~Graph()
+{
+	//remove maps?¿
+}
+
 void Graph::initNodesMap(std::vector<std::vector<int>> *terrain)
 {
-	//for (int i = 0; i < terrain->size(); i++)
-	//{
-	//	for (int j = 0; j < (*terrain)[i].size(); j++)//si poso '1' en comptes de 'i', peta
-	//	//for (int j = 0; j < terrain->at(i).size(); j++)
-	//	{
-	//		nodesMap.insert(std::pair<std::pair<int, int>, Node*> (std::make_pair(i,j), new Node(i,j)));
-	//	}
-	//	//std::cout << i;//a la segona 'i', peta.
-	//}
-
-	for (int i = 0; i < num_cell_x; i++)//cols
+	for (int row = 0; row < num_cell_y; row++)//cols
 	{
-		for (int j = 0; j < num_cell_y; j++)//rows
+		for (int col = 0; col < num_cell_x; col++)//rows
 		{
-			nodesMap.insert(std::pair<std::pair<int, int>, Node*> (std::make_pair(i,j), new Node(i,j)));
+			nodesMap.insert(std::pair<std::pair<int, int>, Node*> (std::make_pair(row,col), new Node(row, col)));
 		}
 	}
-	
 }
 
 void Graph::initEdgesMap(std::vector<std::vector<int>> *terrain)
 {
-	//for (int i = 0; i < terrain->size(); i++)
-	//{
-	//	for (int j = 0; j < (*terrain)[i].size(); j++)//si poso '1' en comptes de 'i', peta
-	for (int i = 0; i < num_cell_x; i++)
+	for (int row = 0; row < num_cell_y; row++)
 	{
-		for (int j = 0; j < num_cell_y; j++)
+		for (int col = 0; col < num_cell_x; col++)
 		{
-			std::cout << i << " " << j << std::endl;
-			if ((*terrain)[j][i] != 0)
+			std::cout << row << " " << col << std::endl;
+			if ((*terrain)[row][col] != 0)
 			{
 				
 				//look for all other nodes behind it
-				CheckAndConnectNeighborNodeMap(j, i, -1, -1, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, -1, 0, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, -1, 1, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, 0, -1, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, 0, 1, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, 1, -1, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, 1, 0, terrain);
-				CheckAndConnectNeighborNodeMap(j,i, 1, 1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, -1, -1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, -1, 0, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, -1, 1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, 0, -1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, 0, 1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, 1, -1, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, 1, 0, terrain);
+				CheckAndConnectNeighborNodeMap(row, col, 1, 1, terrain);
 			}
 		}
 	}
-	std::cout << " end of init edges";
 }
 
-void Graph::CheckAndConnectNeighborNodeMap(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain)
+void Graph::CheckAndConnectNeighborNodeMap(int row, int col, int nRow, int nCol, std::vector<std::vector<int>> *terrain)
 {
-	if ((i + ni) >= 0 && (i + ni) < num_cell_x && (j + nj) >= 0 && (j + nj) < num_cell_y)
+	if (CheckNeighborExists(row + nRow, col + nCol))
 	{
-		int w = terrain->at(i + ni).at(j + nj);
+		int w = terrain->at(row + nRow).at(col + nCol);
 		if (w != 0)
 		{
-			CreateConnection(nodesMap.at(std::make_pair(i, j)), nodesMap.at(std::make_pair(i + ni, j + nj)), w);
+			CreateConnection(nodesMap.at(std::make_pair(row, col)), nodesMap.at(std::make_pair(row + nRow, col + nCol)), w);
 		}
 	}
 }
 
-Graph::~Graph()
+bool Graph::CheckNeighborExists(int row, int col)
 {
-	//remove maps?¿
+	if ((row >= 0 && row < num_cell_y) && (col >= 0 && col < num_cell_x))
+		return true;
+	return false;
 }
 
 void Graph::CreateConnection(Node* node1, Node* node2, int weight = 1)
@@ -90,7 +82,6 @@ void Graph::CreateConnection(Node* node1, Node* node2, int weight = 1)
 	node1->adjacencyList.push_back(node2);
 	node2->adjacencyList.push_back(node1);
 	edgesMap.emplace(std::make_pair(node1, node2), new Edge(node1, node2, weight));
-	//std::cout << "hola";
 }
 
 //unused
