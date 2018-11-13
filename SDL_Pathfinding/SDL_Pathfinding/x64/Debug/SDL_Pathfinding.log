@@ -1,0 +1,13 @@
+﻿  Agent.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\agent.h(4): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  main.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\main.cpp(2): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  ScenePathFindingMouse.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scene.h(3): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  SDL_SimpleApp.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\sdl_simpleapp.h(3): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  SteeringBehavior.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\agent.h(4): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  utils.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\utils.cpp(5): fatal error C1083: No se puede abrir el archivo incluir: 'SDL.h': No such file or directory
+  Generando código...

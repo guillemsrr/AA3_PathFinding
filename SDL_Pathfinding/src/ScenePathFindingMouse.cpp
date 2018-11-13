@@ -2,6 +2,18 @@
 
 using namespace std;
 
+//Variables para crear el grafo
+std::vector<Nodo*> listaNodos;
+std::vector<Edge*> listaEdges;
+Grafo* grafo=new Grafo();
+
+bool loadGraphEx1 = false;
+bool loadGraphEx2 = false;
+bool loadGraphEx3 = false;
+bool loadGraphEx4 = false;
+
+
+
 ScenePathFindingMouse::ScenePathFindingMouse()
 {
 	draw_grid = false;
@@ -46,6 +58,28 @@ ScenePathFindingMouse::~ScenePathFindingMouse()
 
 void ScenePathFindingMouse::update(float dtime, SDL_Event *event)
 {
+	/*Exercise detection*/
+	//std::cout << exercise;
+	switch (exercise)
+	{
+		case 1:
+			///BREATH FIRST-SEARCH
+
+			//Inicializar el grafo
+			if(!loadGraphEx1)
+				loadGraph(exercise);
+			
+			//Set the variables de otros ejercicios
+			loadGraphEx2 = false;
+			loadGraphEx3 = false;
+			loadGraphEx4 = false;
+
+			//BREATH FIRST-SEARCH ALGORITHM FUNCTION
+			PathFinding::BreathFirstSearch(grafo);
+
+			break;
+	}
+
 	/* Keyboard & Mouse events */
 	switch (event->type) {
 	case SDL_KEYDOWN:
@@ -113,15 +147,40 @@ void ScenePathFindingMouse::drawMaze()
 	{
 		for (int i = 0; i < num_cell_x; i++)
 		{		
-			switch (terrain[j][i])
+			//switch (terrain[j][i])
+			//{
+			//case 0:
+			//	SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 255, 255);
+			//	break;
+			//case 1: // Do not draw if it is not necessary (bg is already black)
+			//	/*if ((i == 2) && (j == 2))
+			//		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 153, 255, 102, 255);
+			//	else
+			//		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 0, 255);*/
+
+
+			//	SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 0, 255);
+			//	break;
+			//default:
+			//	continue;
+			//}
+
+			if (terrain[j][i] == 0)
 			{
-			case 0:
 				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 255, 255);
-				break;
-			case 1: // Do not draw if it is not necessary (bg is already black)
-			default:
-				continue;
 			}
+			else
+			{
+				/*if ((i == 2) && (j == 2))
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 153, 255, 102, 255);
+				else
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 0, 255);*/
+
+
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 0, 255);
+			}
+
+
 
 			coords = cell2pix(Vector2D(i,j)) - Vector2D( (float)CELL_SIZE/2, (float)CELL_SIZE/2 );
 			rect = { (int)coords.x, (int)coords.y, CELL_SIZE, CELL_SIZE };
@@ -202,4 +261,117 @@ bool ScenePathFindingMouse::isValidCell(Vector2D cell)
 	if ((cell.x < 0) || (cell.y < 0) || (cell.y >= terrain.size()) || (cell.x >= terrain[0].size()) )
 		return false;
 	return !(terrain[(unsigned int)cell.y][(unsigned int)cell.x] == 0);
+}
+
+
+void ScenePathFindingMouse::loadGraph(int n)
+{
+	switch (n)
+	{
+		case 1:
+			//Recojemos todos los nodos en una lista
+			for (int i = 0; i < terrain.size(); i++)
+			{
+				for (int j = 0; j < terrain.size(); j++)
+				{
+					//std::cout << terrain[i][j];
+					if (terrain[i][j] != 0)
+					{
+						Nodo* aux = new Nodo(i, j, 0);
+						listaNodos.push_back(aux);
+					}
+				}
+				//std::cout << std::endl;
+			}
+
+			//LLenamos el vector de adyacencia de cada nodo
+			for (int i = 0; i < listaNodos.size(); i++)
+			{
+				std::vector<Nodo*> adj;
+				for (int j = 0; j < listaNodos.size(); j++)
+				{
+					if (j != i)
+					{
+						//IZQUIERDA
+						if ((listaNodos[j]->x == listaNodos[i]->x - 1) && (listaNodos[j]->y == listaNodos[i]->y))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//IZQUIERDA-ARRIBA
+						if ((listaNodos[j]->x == listaNodos[i]->x - 1) && (listaNodos[j]->y == listaNodos[i]->y-1))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//IZQUIERDA-ABAJO
+						if ((listaNodos[j]->x == listaNodos[i]->x - 1) && (listaNodos[j]->y == listaNodos[i]->y+1))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//DERECHA
+						if ((listaNodos[j]->x == listaNodos[i]->x + 1) && (listaNodos[j]->y == listaNodos[i]->y))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//DERECHA-ARRIBA
+						if ((listaNodos[j]->x == listaNodos[i]->x + 1) && (listaNodos[j]->y == listaNodos[i]->y-1))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//DERECHA-ABAJO
+						if ((listaNodos[j]->x == listaNodos[i]->x + 1) && (listaNodos[j]->y == listaNodos[i]->y+1))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//ARRIBA
+						if ((listaNodos[j]->y == listaNodos[i]->y - 1) && (listaNodos[j]->x == listaNodos[i]->x))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+						//ABAJO
+						if ((listaNodos[j]->y == listaNodos[i]->y + 1) && (listaNodos[j]->x == listaNodos[i]->x))
+						{
+							adj.push_back(listaNodos[j]);
+						}
+
+					}
+				}
+				listaNodos[i]->adyacentes = adj;
+				adj.clear();
+			}
+
+			//Creamos los edges de todo el grafo
+			for (int i = 0; i < listaNodos.size(); i++)
+			{
+				for (int j = 0; j < listaNodos[i]->adyacentes.size(); j++)
+				{
+					Edge* aux = new Edge(listaNodos[i], listaNodos[i]->adyacentes[j], 0);
+					listaEdges.push_back(aux);
+				}
+			}
+
+			//Creamos el grafo con su estructura correspondiente
+
+			
+			for (int i = 0; i < listaNodos.size(); i++)
+			{
+				std::vector<Edge*> aux;
+				for (int j = 0; j < listaEdges.size(); j++)
+				{
+					if (listaEdges[j]->from == listaNodos[i])
+					{
+						aux.push_back(listaEdges[j]);
+					}
+				}
+				grafo->mapa.insert(std::pair<Nodo*, std::vector<Edge*>>(listaNodos[i], aux));
+				aux.clear();
+			}
+			//grafo->mapa.insert(std::pair< Nodo*, std::vector<Edge*>>());
+
+
+
+
+			loadGraphEx1 = true;
+			break;
+	}
+
 }

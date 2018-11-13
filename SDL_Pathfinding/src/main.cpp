@@ -4,11 +4,14 @@
 
 #include "SDL_SimpleApp.h"
 #include "ScenePathFindingMouse.h"
+#include "BFS.h"
 
 using namespace std;
 
 int main(int argc, char ** argv)
 {
+	int exercise = 0;
+
 	bool quit = false;
 	SDL_Event event;
 	int this_tick = 0;
@@ -50,6 +53,11 @@ int main(int argc, char ** argv)
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_2)
 			{
+				exercise = 1;
+				delete(curr_scene);
+				curr_scene = new ScenePathFindingMouse;
+				curr_scene->exercise = 1;
+				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_3)
 			{

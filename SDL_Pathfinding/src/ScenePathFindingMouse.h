@@ -6,6 +6,10 @@
 #include <time.h>
 #include "Scene.h"
 #include "Agent.h"
+#include "Nodo.h"
+#include "Edge.h"
+#include "Grafo.h"
+#include "PathFinding.h"
 
 class ScenePathFindingMouse :
 	public Scene
@@ -19,6 +23,7 @@ public:
 private:
 	std::vector<Agent*> agents;
 	Vector2D coinPosition;
+	
 
 	int num_cell_x;
 	int num_cell_y;
@@ -36,5 +41,6 @@ private:
 	SDL_Texture *background_texture;
 	SDL_Texture *coin_texture;
 	bool loadTextures(char* filename_bg, char* filename_coin);
+	void loadGraph(int);
 
 };

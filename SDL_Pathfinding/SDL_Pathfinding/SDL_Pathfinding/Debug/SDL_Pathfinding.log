@@ -1,0 +1,14 @@
+﻿  PathFinding.cpp
+  ScenePathFindingMouse.cpp
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(185): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(273): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(275): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(288): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(291): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(343): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(345): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(355): warning C4018: '<': no coinciden signed/unsigned
+c:\users\adria\desktop\aa3_pathfinding\aa3_pathfinding\sdl_pathfinding\src\scenepathfindingmouse.cpp(358): warning C4018: '<': no coinciden signed/unsigned
+  main.cpp
+  Generando código...
+  SDL_Pathfinding.vcxproj -> C:\Users\adria\Desktop\AA3_Pathfinding\AA3_PathFinding\SDL_Pathfinding\\bin\SDL_Pathfinding.exe
