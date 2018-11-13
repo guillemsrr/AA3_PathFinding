@@ -20,6 +20,10 @@ public:
 	std::map<std::pair<int, int>, Node*> nodesMap;
 	std::map<std::pair<Node*, Node*>,Edge*> edgesMap;
 
+	//------------------- Alex --------------------//
+	std::map<Node*, std::vector<Edge*>> m_graph;
+	//--------------------------------------------//
+
 	void initNodesMap(std::vector<std::vector<int>> *terrain);
 	void initEdgesMap(std::vector<std::vector<int>> *terrain);
 	void CheckAndConnectNeighborNodeMap(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
