@@ -12,7 +12,12 @@ public:
 	PathFinding();
 	~PathFinding();
 
-	static void BreathFirstSearch(Grafo* g);
+
+	 std::queue<Nodo*> fronteraBFS;
+	 std::vector<Nodo*> visitadosBFS;
+
+	 void BreathFirstSearch(Grafo* g, int agentX, int agentY);
+	
 
 };
 

@@ -11,8 +11,19 @@ PathFinding::~PathFinding()
 {
 }
 
-void PathFinding::BreathFirstSearch(Grafo * g)
+void PathFinding::BreathFirstSearch(Grafo * g, int agentX, int agentY)
 {
-	std::map< Nodo*, std::vector<Edge*>>::iterator it = g->mapa.begin();
-	std::cout << it->first << std::endl;
+	int startX = agentX;
+	int startY = agentY;
+
+	std::map<Nodo*, std::vector<Edge*>>::iterator it = g->mapa.begin();
+
+	while (it != g->mapa.end())
+	{
+		if (it->first->x == startX && it->first->y == startY)
+		{
+			fronteraBFS.push(it->first);
+		}
+	}
 }
+

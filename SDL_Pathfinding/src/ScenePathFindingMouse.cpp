@@ -12,6 +12,8 @@ bool loadGraphEx2 = false;
 bool loadGraphEx3 = false;
 bool loadGraphEx4 = false;
 
+Vector2D agentStart;
+Vector2D coinStart;
 
 
 ScenePathFindingMouse::ScenePathFindingMouse()
@@ -36,10 +38,14 @@ ScenePathFindingMouse::ScenePathFindingMouse()
 		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	agents[0]->setPosition(cell2pix(rand_cell));
 
+	agentStart = rand_cell;
+
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1,-1);
 	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell)<3)) 
 		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+	coinStart = coinPosition;
 
 }
 
@@ -75,7 +81,9 @@ void ScenePathFindingMouse::update(float dtime, SDL_Event *event)
 			loadGraphEx4 = false;
 
 			//BREATH FIRST-SEARCH ALGORITHM FUNCTION
-			PathFinding::BreathFirstSearch(grafo);
+			//PathFinding::BreathFirstSearch(grafo);
+			//std::cout << agents[0]->getPosition().x << "////" << agents[0]->getPosition().y << std::endl;
+			std::cout << agentStart.x << "////" << agentStart.y << std::endl;
 
 			break;
 	}
