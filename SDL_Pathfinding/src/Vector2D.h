@@ -33,7 +33,7 @@ struct Vector2D
 	{
 		return x * x + y * y;
 	}
-	
+
 	inline Vector2D operator+(const Vector2D& v)
 	{
 		return Vector2D(x + v.x, y + v.y);
@@ -142,6 +142,16 @@ struct Vector2D
 		return v.LengthSquared();
 	}
 };
+
+// LessThanComparable
+//struct our_cmp
+//{
+//	bool operator()(Vector2D a, Vector2D b)
+//	{
+//		return std::make_pair(a.x, a.y) < std::make_pair(b.x, b.y);
+//	}
+//};
+
 
 namespace Vector2DUtils
 {

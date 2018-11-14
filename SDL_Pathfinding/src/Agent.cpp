@@ -7,8 +7,8 @@ Agent::Agent() : sprite_texture(0),
 	             target(Vector2D(1000, 100)),
 	             velocity(Vector2D(0,0)),
 	             mass(0.1f),
-	             max_force(150),
-	             max_velocity(200),
+	             max_force(2000),//150
+	             max_velocity(1000),//200
 	             orientation(0),
 	             color({ 255,255,255,255 }),
 				 sprite_num_frames(0),

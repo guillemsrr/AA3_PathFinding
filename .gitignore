@@ -1,0 +1,8 @@
+
+*.exe
+
+*.ilk
+
+*.pdb
+
+SDL_Pathfinding/SDL_Pathfinding/SDL_Pathfinding/Debug/
