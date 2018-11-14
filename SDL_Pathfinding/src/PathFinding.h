@@ -9,9 +9,9 @@ public:
 	PathFinding();
 	~PathFinding();
 
-	void BreadthFirstSearch(Graph* graph, Node* start, Node* goal);
-	void Dijkstra(Graph* graph, Node* start, Node* goal);
-	void GreedyBestFirstSearch(Graph* graph, Node* start, Node* goal);
-	void A(Graph* graph, Node* start, Node* goal);
+	static std::map<Node*, Node*> BreadthFirstSearch( Node* start, Node* goal);
+	static void Dijkstra(Graph* graph, Node* start, Node* goal);
+	static void GreedyBestFirstSearch(Graph* graph, Node* start, Node* goal);
+	static void A(Graph* graph, Node* start, Node* goal);
 };
 

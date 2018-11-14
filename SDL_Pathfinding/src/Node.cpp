@@ -4,15 +4,13 @@
 
 Node::Node()
 {
-	row = -1;
-	column = -1;
+	m_cell = (-1, -1);
 }
 
 
-Node::Node(int r, int c)
+Node::Node(Vector2D cell)
 {
-	row = r;
-	column = c;
+	m_cell = cell;
 };
 
 Node::~Node()

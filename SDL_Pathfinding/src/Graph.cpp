@@ -8,14 +8,15 @@ Graph::Graph(std::vector<std::vector<int>> *terrain)
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
 
-	std::cout << num_cell_x << std::endl;
-	std::cout << num_cell_y << std::endl;
+	std::cout << "num_cell_x: " << num_cell_x << std::endl;
+	std::cout << "num_cell_y: " << num_cell_y << std::endl;
 
 	//initialize nodes:
 	initNodesMap(terrain);
 
 	//create connections:
 	initEdgesMap(terrain);
+
 }
 
 Graph::~Graph()
@@ -23,14 +24,20 @@ Graph::~Graph()
 	//remove maps?¿
 }
 
+
 void Graph::initNodesMap(std::vector<std::vector<int>> *terrain)
 {
-	for (int row = 0; row < num_cell_y; row++)//cols
+	for (int row = 0; row < num_cell_y; row++)
 	{
-		for (int col = 0; col < num_cell_x; col++)//rows
+		for (int col = 0; col < num_cell_x; col++)
 		{
-			nodesMap.insert(std::pair<std::pair<int, int>, Node*> (std::make_pair(row,col), new Node(row, col)));
+			std::cout << (*terrain)[row][col] << " ";
+			//std::cout << "["<<row<<", "<<col<<"] = "<<(*terrain)[row][col] << "  ";
+			//std::cout << "["<<row<<", "<<col<<"]  ";
+
+			nodesMap.emplace(std::make_pair(row, col), new Node(Vector2D(col, row)));
 		}
+		std::cout << std::endl << std::endl;
 	}
 }
 
@@ -40,11 +47,10 @@ void Graph::initEdgesMap(std::vector<std::vector<int>> *terrain)
 	{
 		for (int col = 0; col < num_cell_x; col++)
 		{
-			std::cout << row << " " << col << std::endl;
+			//std::cout << row << " " << col << std::endl;
 			if ((*terrain)[row][col] != 0)
 			{
-				
-				//look for all other nodes behind it
+				//look for all other nodes next to it
 				CheckAndConnectNeighborNodeMap(row, col, -1, -1, terrain);
 				CheckAndConnectNeighborNodeMap(row, col, -1, 0, terrain);
 				CheckAndConnectNeighborNodeMap(row, col, -1, 1, terrain);
@@ -83,54 +89,15 @@ void Graph::CreateConnection(Node* node1, Node* node2, int weight = 1)
 	node2->adjacencyList.push_back(node1);
 	edgesMap.emplace(std::make_pair(node1, node2), new Edge(node1, node2, weight));
 }
-
-//unused
-void Graph::initNodeArray2D(std::vector<std::vector<int>> *terrain)
+std::vector<Node*> Graph::GetShortestPath(std::map<Node*, Node*> visited, Node* goal)
 {
-	nodeArray2D = new Node*[terrain->size()];
-	for (int i = 0; i < terrain->size(); i++)
+	Node* comes_from = goal;
+	std::vector<Node*> shortestPath;
+	while (comes_from != nullptr)
 	{
-		nodeArray2D[i] = new Node[terrain[i].size()];//<------------crashes here
+		shortestPath.push_back(comes_from);
+		comes_from = visited.at(comes_from);
 	}
 
-	for (int i = 0; i < terrain->size(); i++)//rows
-	{
-		for (int j = 0; j < terrain[i].size(); j++)//columns
-		{
-			if (&terrain[i][j] != 0)
-			{
-				if (nodeArray2D[i][j].row == -1 && nodeArray2D[i][j].column == -1)//create node if it doesn't exist
-				{
-					Node node = Node(i, j);
-					nodeArray2D[i][j] = node;
-				}
-
-				//look for all other nodes behind it
-				CheckAndConnectNeighborArray2D(i, j, -1, -1, terrain);
-				CheckAndConnectNeighborArray2D(i, j, -1, 0, terrain);
-				CheckAndConnectNeighborArray2D(i, j, -1, 1, terrain);
-				CheckAndConnectNeighborArray2D(i, j, 0, -1, terrain);
-				CheckAndConnectNeighborArray2D(i, j, 0, 1, terrain);
-				CheckAndConnectNeighborArray2D(i, j, 1, -1, terrain);
-				CheckAndConnectNeighborArray2D(i, j, 1, 0, terrain);
-				CheckAndConnectNeighborArray2D(i, j, 1, 1, terrain);
-			}
-		}
-	}
-}
-
-//unused
-void Graph::CheckAndConnectNeighborArray2D(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain)
-{
-	//int w = terrain[i + ni][j + nj];
-	int w = (terrain->at(i + ni)).at(j + nj);
-	if (w != 0)
-	{
-		if (&nodeArray2D[i + ni][j + nj] )
-		{
-			Node node = Node( i + ni, j + nj );
-			nodeArray2D[i + ni][j + nj] = node;
-		}
-		CreateConnection(&nodeArray2D[i][j], &nodeArray2D[i+ni][j+nj], w);
-	}
+	return shortestPath;
 }

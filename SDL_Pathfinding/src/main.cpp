@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new ScenePathFindingMouse;
+	Scene *curr_scene = new Exercise1Scene(false);
 	app->setWindowTitle(curr_scene->getTitle());
 
 	

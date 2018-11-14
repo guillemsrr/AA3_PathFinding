@@ -15,8 +15,7 @@ public:
 	int num_cell_x;
 	int	num_cell_y;
 
-	std::vector< std::vector<Node*> > nodesList;
-	Node** nodeArray2D;
+	//std::map<Vector2D, Node*, our_cmp> nodesMap;
 	std::map<std::pair<int, int>, Node*> nodesMap;
 	std::map<std::pair<Node*, Node*>,Edge*> edgesMap;
 
@@ -25,8 +24,6 @@ public:
 	void CheckAndConnectNeighborNodeMap(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
 	void CreateConnection(Node* node1, Node* node2, int weight);
 	bool CheckNeighborExists(int i, int j);
-	//unused:
-	void initNodeArray2D(std::vector<std::vector<int>> *terrain);
-	void CheckAndConnectNeighborArray2D(int i, int j, int ni, int nj, std::vector<std::vector<int>> *terrain);
+	static std::vector<Node*> GetShortestPath(std::map<Node*, Node*> visited, Node* goal);
 };
 

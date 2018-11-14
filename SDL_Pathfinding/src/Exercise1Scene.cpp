@@ -2,11 +2,6 @@
 
 
 
-Exercise1Scene::Exercise1Scene()
-{
-	init();
-}
-
 void Exercise1Scene::init()
 {
 	std::srand(1);//seed is set to 1
@@ -28,13 +23,21 @@ void Exercise1Scene::init()
 	// set agent position coords to the center of a random cell
 	Vector2D rand_cell(-1, -1);
 	while (!isValidCell(rand_cell))
-		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+		rand_cell = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 	agents[0]->setPosition(cell2pix(rand_cell));
+
+	//DEBUG
+	agents[0]->setPosition(cell2pix(Vector2D(1,1)));
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);
 	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell) < 3))
-		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+		coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+
+	std::cout << "Coin position: " << coinPosition.x << " " << coinPosition.y << std::endl;
+	//DEBUG
+	//coinPosition = Vector2D(num_cell_x/2, num_cell_y/2);
+
 }
 
 Exercise1Scene::Exercise1Scene(bool weight)
@@ -47,6 +50,8 @@ Exercise1Scene::Exercise1Scene(bool weight)
 	}
 	
 	m_graph = new Graph(&terrain);
+
+	CreatePathToCoin();
 }
 
 Exercise1Scene::~Exercise1Scene()
@@ -61,7 +66,6 @@ Exercise1Scene::~Exercise1Scene()
 		delete agents[i];
 	}
 }
-
 
 void Exercise1Scene::update(float dtime, SDL_Event *event)
 {
@@ -79,23 +83,27 @@ void Exercise1Scene::update(float dtime, SDL_Event *event)
 	Vector2D steering_force = agents[0]->Behavior()->SimplePathFollowing(agents[0], dtime);
 	agents[0]->update(steering_force, dtime, event);
 
-	// if we have arrived to the coin, replace it ina random cell!
+	// if we have arrived to the coin, replace it in a random cell!
 	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
 	{
 		coinPosition = Vector2D(-1, -1);
 		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 3))
-			coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
-	}
+			coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 
+		system("cls");
+		std::cout << "Coin position: " << coinPosition.x << " " << coinPosition.y << std::endl;
+		//compute new path
+		CreatePathToCoin();
+	}
 }
+
 
 #pragma region GivenFunctions
 
 void Exercise1Scene::draw()
 {
 	drawMaze();
-	drawCoin();
-
+	
 	if (draw_grid)
 	{
 		SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 255, 255, 255, 127);
@@ -109,6 +117,8 @@ void Exercise1Scene::draw()
 		}
 	}
 
+	PaintVisitedNodes();
+	drawCoin();
 	agents[0]->draw();
 }
 
@@ -244,4 +254,50 @@ void Exercise1Scene::CreateSpecificWeights()
 	terrain[num_cell_x / 2 -1][num_cell_y / 2 -1] = 2;
 	terrain[num_cell_x / 2 -1][num_cell_y / 2 +1] = 2;
 	terrain[num_cell_x / 2 +1][num_cell_y / 2 -1] = 2;
+}
+
+void Exercise1Scene::CreatePathToCoin()
+{
+	Vector2D agentCell = pix2cell(agents[0]->getPosition());
+	Node* playerNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
+	coinNode = m_graph->nodesMap.at(Cell2Pair(coinPosition));
+
+	std::map<Node*, Node*> visited= PathFinding::BreadthFirstSearch(playerNode, coinNode);
+	std::cout << "Visited nodes = "<< visited.size() << std::endl;
+	visitedNodesPosition.clear();
+	GetVisitedNodesPosition(visited);
+	SetPath(visited);
+}
+
+std::pair<int, int> Exercise1Scene::Cell2Pair(Vector2D cell)
+{
+	//std::cout << "cell " << cell.x << " "<<cell.y << std::endl;
+	return std::make_pair(cell.y, cell.x);
+}
+
+void Exercise1Scene::SetPath(std::map<Node*, Node*> visited)
+{
+	std::vector<Node*> shortestPath = Graph::GetShortestPath(visited, coinNode);
+
+	for (std::vector<Node*>::reverse_iterator it = shortestPath.rbegin(); it != shortestPath.rend(); ++it)
+	{
+		agents[0]->addPathPoint(cell2pix((*it)->m_cell));
+	}
+}
+
+void Exercise1Scene::GetVisitedNodesPosition(std::map<Node*, Node*> visited)
+{
+	for (std::map<Node*, Node*>::iterator it = visited.begin(); it != visited.end(); it++)
+	{
+		Vector2D pos = cell2pix(it->first->m_cell);
+		visitedNodesPosition.push_back(pos);
+	}
+}
+
+void Exercise1Scene::PaintVisitedNodes()
+{
+	for each(Vector2D pos in visitedNodesPosition)
+	{
+		draw_circle(TheApp::Instance()->getRenderer(), (int)pos.x, (int)pos.y, 15, 75, 75, 0, 255);
+	}
 }

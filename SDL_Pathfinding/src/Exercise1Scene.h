@@ -13,7 +13,6 @@ class Exercise1Scene :
 	public Scene
 {
 public:
-	Exercise1Scene();
 	Exercise1Scene(bool weight);
 	~Exercise1Scene();
 	void update(float dtime, SDL_Event *event);
@@ -41,11 +40,19 @@ private:
 	bool loadTextures(char* filename_bg, char* filename_coin);
 
 	//New Code
+	
 	void init();
 	Graph* m_graph;
 	const int MAX_WEIGHT = 5;
 	const int MIN_WEIGHT = 1;
 	void CreateRandomWeights();
 	void CreateSpecificWeights();
+	Node* coinNode;
+	void CreatePathToCoin();
+	void SetPath(std::map<Node*, Node*> v);
+	std::pair<int, int> Cell2Pair(Vector2D);
+	void GetVisitedNodesPosition(std::map<Node*, Node*> visited);
+	void PaintVisitedNodes();
+	std::vector<Vector2D>visitedNodesPosition;
 };
 
