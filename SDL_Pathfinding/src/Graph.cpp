@@ -23,6 +23,13 @@ Graph::~Graph()
 	//remove maps?¿
 }
 
+//---------------- ALEX -------------------//
+int Graph::GetCost(Node * a, Node * b)
+{
+	return 0;
+}
+//-----------------------------------------//
+
 void Graph::initNodesMap(std::vector<std::vector<int>> *terrain)
 {
 	for (int row = 0; row < num_cell_y; row++)//cols

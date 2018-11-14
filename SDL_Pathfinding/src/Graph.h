@@ -22,6 +22,7 @@ public:
 
 	//------------------- Alex --------------------//
 	std::map<Node*, std::vector<Edge*>> m_graph;
+	int GetCost(Node *a, Node *b);
 	//--------------------------------------------//
 
 	void initNodesMap(std::vector<std::vector<int>> *terrain);

@@ -106,7 +106,13 @@ void PathFinding::Dijkstra(Graph *graph, Node *start, Node *end)
 		for (const auto &e : neighbors)
 		{
 			Node *next = e->to_node;
-			//TODO
+			int newCost = cameFrom[current].second + graph->GetCost(current, next);
+			if (cameFrom.count(next) == 0 || newCost < cameFrom[next].second)
+			{
+				int priority = newCost;
+				frontier.push(std::make_pair(next, priority));
+				cameFrom[next].first = current;
+			}
 		}
 	}
 }
