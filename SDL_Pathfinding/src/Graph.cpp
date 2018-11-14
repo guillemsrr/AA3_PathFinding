@@ -8,8 +8,8 @@ Graph::Graph(std::vector<std::vector<int>> *terrain)
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
 
-	std::cout << "num_cell_x: " << num_cell_x << std::endl;
-	std::cout << "num_cell_y: " << num_cell_y << std::endl;
+	//std::cout << "num_cell_x: " << num_cell_x << std::endl;
+	//std::cout << "num_cell_y: " << num_cell_y << std::endl;
 
 	//initialize nodes:
 	initNodesMap(terrain);
@@ -31,13 +31,13 @@ void Graph::initNodesMap(std::vector<std::vector<int>> *terrain)
 	{
 		for (int col = 0; col < num_cell_x; col++)
 		{
-			std::cout << (*terrain)[row][col] << " ";
+			//std::cout << (*terrain)[row][col] << " ";
 			//std::cout << "["<<row<<", "<<col<<"] = "<<(*terrain)[row][col] << "  ";
 			//std::cout << "["<<row<<", "<<col<<"]  ";
 
 			nodesMap.emplace(std::make_pair(row, col), new Node(Vector2D(col, row)));
 		}
-		std::cout << std::endl << std::endl;
+		//std::cout << std::endl << std::endl;
 	}
 }
 

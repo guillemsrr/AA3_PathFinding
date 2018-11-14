@@ -40,7 +40,6 @@ private:
 	bool loadTextures(char* filename_bg, char* filename_coin);
 
 	//New Code
-	
 	void init();
 	Graph* m_graph;
 	const int MAX_WEIGHT = 5;
@@ -54,5 +53,13 @@ private:
 	void GetVisitedNodesPosition(std::map<Node*, Node*> visited);
 	void PaintVisitedNodes();
 	std::vector<Vector2D>visitedNodesPosition;
+
+	int numVisited;
+	int minVisited;
+	int maxVisited;
+	int meanVisited;
+	int numFindings;
+	const int maxNumFindings = 10;
+	void PrintStatistics();
 };
 

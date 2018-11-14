@@ -50,7 +50,10 @@ Exercise1Scene::Exercise1Scene(bool weight)
 	}
 	
 	m_graph = new Graph(&terrain);
-
+	minVisited = 100000;
+	maxVisited = 0;
+	meanVisited = 0;
+	numFindings = 0;
 	CreatePathToCoin();
 }
 
@@ -80,20 +83,24 @@ void Exercise1Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	Vector2D steering_force = agents[0]->Behavior()->SimplePathFollowing(agents[0], dtime);
-	agents[0]->update(steering_force, dtime, event);
+	if (numFindings < maxNumFindings) {
 
-	// if we have arrived to the coin, replace it in a random cell!
-	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
-	{
-		coinPosition = Vector2D(-1, -1);
-		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 3))
-			coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+		Vector2D steering_force = agents[0]->Behavior()->SimplePathFollowing(agents[0], dtime);
+		agents[0]->update(steering_force, dtime, event);
 
-		system("cls");
-		std::cout << "Coin position: " << coinPosition.x << " " << coinPosition.y << std::endl;
-		//compute new path
-		CreatePathToCoin();
+		// if we have arrived to the coin, replace it in a random cell!
+		if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
+		{
+			coinPosition = Vector2D(-1, -1);
+			while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 3))
+				coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+
+			//compute new path
+			CreatePathToCoin();
+			numFindings++;
+
+			PrintStatistics();
+		}
 	}
 }
 
@@ -263,7 +270,7 @@ void Exercise1Scene::CreatePathToCoin()
 	coinNode = m_graph->nodesMap.at(Cell2Pair(coinPosition));
 
 	std::map<Node*, Node*> visited= PathFinding::BreadthFirstSearch(playerNode, coinNode);
-	std::cout << "Visited nodes = "<< visited.size() << std::endl;
+	numVisited = visited.size();
 	visitedNodesPosition.clear();
 	GetVisitedNodesPosition(visited);
 	SetPath(visited);
@@ -300,4 +307,16 @@ void Exercise1Scene::PaintVisitedNodes()
 	{
 		draw_circle(TheApp::Instance()->getRenderer(), (int)pos.x, (int)pos.y, 15, 75, 75, 0, 255);
 	}
+}
+
+void Exercise1Scene::PrintStatistics()
+{
+	system("cls");
+	std::cout << "Min visited: " << minVisited << " max visited: " << maxVisited << " mean: " << meanVisited / numFindings << std::endl;
+	if (numVisited < minVisited)
+		minVisited = numVisited;
+	if (numVisited > maxVisited)
+		maxVisited = numVisited;
+
+	meanVisited += numVisited;
 }
