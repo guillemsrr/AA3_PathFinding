@@ -58,8 +58,8 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_3)//Dijkstra
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(true, 2);//we need to create weights
-				curr_scene->CreateRandomWeights();
+				curr_scene = new Exercise1Scene(true, 3);//we need to create weights
+				//curr_scene->CreateRandomWeights();
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_4)//Greedy

@@ -1,6 +1,12 @@
 #include "PathFinding.h"
 
 
+struct Order {
+	bool operator()(const std::pair<Node*, int> a, const std::pair<Node*, int> b) const
+	{
+		return a.second > b.second;
+	}
+};
 
 PathFinding::PathFinding()
 {
@@ -47,7 +53,7 @@ std::map<Node*, Node*> PathFinding::BreadthFirstSearch( Node * start, Node * goa
 
 std::map<Node*, std::pair<Node*, int>> PathFinding::Dijkstra(Graph *graph, Node *start, Node *goal)
 {
-	std::priority_queue<std::pair<Node*, int>> frontier;
+	std::priority_queue<std::pair<Node*, int>, std::vector<std::pair<Node*, int>>, Order> frontier;
 	std::map<Node*, std::pair<Node*, int>> cameFrom;
 
 	frontier.push(std::make_pair(start, 0));
@@ -55,9 +61,9 @@ std::map<Node*, std::pair<Node*, int>> PathFinding::Dijkstra(Graph *graph, Node 
 
 	Node *current;
 
-	while (!frontier.empty)
+	while (!frontier.empty())
 	{
-		current = frontier.top->first;
+		current = frontier.top().first;
 
 		if (current == goal)
 		{
@@ -66,14 +72,54 @@ std::map<Node*, std::pair<Node*, int>> PathFinding::Dijkstra(Graph *graph, Node 
 		}
 		else 
 		{
+			frontier.pop();
 			for each(Node *next in current->adjacencyList)
 			{
 				int newCost = cameFrom[current].second + graph->edgesMap[std::make_pair(current, next)]->weight;
 				if (cameFrom.count(next) == 0 || newCost < cameFrom[next].second)
 				{
-					//int priority = newCost;
+					cameFrom[next].second = newCost;
 					frontier.push(std::make_pair(next, newCost));
 					cameFrom[next].first = current;
+				}
+			}
+		}
+	}
+	return cameFrom;
+}
+
+std::map<Node*, Node*> PathFinding::DijkstraV2(Graph * graph, Node * start, Node * goal)
+{
+	std::priority_queue<std::pair<Node*, int>, std::vector<std::pair<Node*, int>>, Order> frontier;
+	std::map<Node*, Node*> cameFrom;
+	std::map<Node*, int> costSoFar;
+
+	frontier.push(std::make_pair(start, 0));
+	cameFrom[start] = nullptr;
+	costSoFar[start] = 0;
+
+	Node *current;
+
+	while (!frontier.empty())
+	{
+		current = frontier.top().first;
+
+		if (current == goal)
+		{
+			//Goal
+			return cameFrom;
+		}
+		else
+		{
+			frontier.pop();
+			for each(Node *next in current->adjacencyList)
+			{
+				int newCost = costSoFar[current] + graph->edgesMap[std::make_pair(current, next)]->weight;
+				if (costSoFar.count(next) == 0 || newCost < costSoFar[next])
+				{
+					costSoFar[next] = newCost;
+					frontier.push(std::make_pair(next, newCost));
+					cameFrom[next] = current;
 				}
 			}
 		}
@@ -89,4 +135,15 @@ void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal
 
 void PathFinding::A(Graph * graph, Node * start, Node * goal)
 {
+}
+
+std::map<Node*, Node*> PathFinding::VisitedByDijkstra(std::map<Node*, std::pair<Node*, int>> d)
+{
+	std::map<Node*, Node*> visited;
+
+	for (auto it = d.begin(); it != d.end(); it++)
+	{
+		visited[it->first] = it->second.first;
+	}
+	return visited;
 }

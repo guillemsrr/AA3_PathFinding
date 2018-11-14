@@ -13,8 +13,6 @@ void Exercise1Scene::init()
 	initMaze("../res/maze.csv");
 	loadTextures("../res/maze.png", "../res/coin.png");
 
-	srand((unsigned int)time(NULL));
-
 	Agent *agent = new Agent;
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agent->setTarget(Vector2D(-20, -20));
@@ -291,7 +289,12 @@ void Exercise1Scene::CreatePathToCoin()
 	case 3:
 		///DIJKSTRA
 
-
+		//visited = PathFinding::VisitedByDijkstra(PathFinding::Dijkstra(m_graph, playerNode, coinNode));
+		visited = PathFinding::DijkstraV2(m_graph, playerNode, coinNode);
+		numVisited = visited.size();
+		visitedNodesPosition.clear();
+		GetVisitedNodesPosition(visited);
+		SetPath(visited);
 		break;
 	case 4:
 		///GBFS
