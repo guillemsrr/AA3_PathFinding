@@ -1,6 +1,6 @@
 #include "Exercise1Scene.h"
 
-
+Node* start;
 
 void Exercise1Scene::init()
 {
@@ -40,7 +40,7 @@ void Exercise1Scene::init()
 
 }
 
-Exercise1Scene::Exercise1Scene(bool weight)
+Exercise1Scene::Exercise1Scene(bool weight, int ex)
 {
 	init();
 
@@ -54,6 +54,7 @@ Exercise1Scene::Exercise1Scene(bool weight)
 	maxVisited = 0;
 	meanVisited = 0;
 	numFindings = 0;
+	exercise = ex;
 	CreatePathToCoin();
 }
 
@@ -267,13 +268,45 @@ void Exercise1Scene::CreatePathToCoin()
 {
 	Vector2D agentCell = pix2cell(agents[0]->getPosition());
 	Node* playerNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
+	start = playerNode;
 	coinNode = m_graph->nodesMap.at(Cell2Pair(coinPosition));
+	
+	std::map<Node*, Node*> visited;
+	switch (exercise)
+	{
+	case 1:
+		///DEFAULT CLICK SCENE
 
-	std::map<Node*, Node*> visited= PathFinding::BreadthFirstSearch(playerNode, coinNode);
-	numVisited = visited.size();
-	visitedNodesPosition.clear();
-	GetVisitedNodesPosition(visited);
-	SetPath(visited);
+
+		break;
+	case 2:
+		///BFS
+
+		visited = PathFinding::BreadthFirstSearch(playerNode, coinNode);
+		numVisited = visited.size();
+		visitedNodesPosition.clear();
+		GetVisitedNodesPosition(visited);
+		SetPath(visited);
+		break;
+	case 3:
+		///DIJKSTRA
+
+
+		break;
+	case 4:
+		///GBFS
+
+		PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
+		break;
+	case 5:
+		///A*
+
+
+		break;
+
+	}
+
+	
 }
 
 std::pair<int, int> Exercise1Scene::Cell2Pair(Vector2D cell)

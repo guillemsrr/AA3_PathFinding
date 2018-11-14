@@ -13,7 +13,7 @@ class Exercise1Scene :
 	public Scene
 {
 public:
-	Exercise1Scene(bool weight);
+	Exercise1Scene(bool weight, int ex);
 	~Exercise1Scene();
 	void update(float dtime, SDL_Event *event);
 	void draw();

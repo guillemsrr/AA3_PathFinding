@@ -51,6 +51,8 @@ void PathFinding::Dijkstra(Graph * graph, Node * start, Node * goal)
 
 void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal)
 {
+	std::cout << "Player: [" << start->m_cell.x << "," << start->m_cell.y << "]" << std::endl;
+	std::cout << "Coin: [" << goal->m_cell.x << "," << goal->m_cell.y << "]" << std::endl;
 }
 
 void PathFinding::A(Graph * graph, Node * start, Node * goal)

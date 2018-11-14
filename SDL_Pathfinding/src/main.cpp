@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new Exercise1Scene(false);
+	Scene *curr_scene = new Exercise1Scene(false, 1);
 	app->setWindowTitle(curr_scene->getTitle());
 
 	
@@ -52,26 +52,26 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_2)//Breadth First Search
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(false);
+				curr_scene = new Exercise1Scene(false, 2);
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_3)//Dijkstra
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(true);//we need to create weights
+				curr_scene = new Exercise1Scene(true, 2);//we need to create weights
 				curr_scene->CreateRandomWeights();
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_4)//Greedy
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(false);
+				curr_scene = new Exercise1Scene(false, 4);
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_5)//A*
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(true);//we need to create weights
+				curr_scene = new Exercise1Scene(true, 5);//we need to create weights
 				curr_scene->CreateRandomWeights();
 				app->setWindowTitle(curr_scene->getTitle());
 			}
