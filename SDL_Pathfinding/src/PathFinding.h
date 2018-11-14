@@ -15,8 +15,9 @@ public:
 
 	 std::queue<Nodo*> fronteraBFS;
 	 std::vector<Nodo*> visitadosBFS;
+	 bool BFSgotPath = false;
 
-	 void BreathFirstSearch(Grafo* g, int agentX, int agentY);
+	 void BreathFirstSearch(Grafo* g, int agentX, int agentY, int coinX, int coinY);
 	
 
 };
