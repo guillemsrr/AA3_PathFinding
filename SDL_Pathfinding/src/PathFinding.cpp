@@ -45,8 +45,40 @@ std::map<Node*, Node*> PathFinding::BreadthFirstSearch( Node * start, Node * goa
 	return visited;
 }
 
-void PathFinding::Dijkstra(Graph * graph, Node * start, Node * goal)
+std::map<Node*, std::pair<Node*, int>> PathFinding::Dijkstra(Graph *graph, Node *start, Node *goal)
 {
+	std::priority_queue<std::pair<Node*, int>> frontier;
+	std::map<Node*, std::pair<Node*, int>> cameFrom;
+
+	frontier.push(std::make_pair(start, 0));
+	cameFrom[start] = std::make_pair(nullptr, NULL);
+
+	Node *current;
+
+	while (!frontier.empty)
+	{
+		current = frontier.top->first;
+
+		if (current == goal)
+		{
+			//Goal
+			return cameFrom;
+		}
+		else 
+		{
+			for each(Node *next in current->adjacencyList)
+			{
+				int newCost = cameFrom[current].second + graph->edgesMap[std::make_pair(current, next)]->weight;
+				if (cameFrom.count(next) == 0 || newCost < cameFrom[next].second)
+				{
+					//int priority = newCost;
+					frontier.push(std::make_pair(next, newCost));
+					cameFrom[next].first = current;
+				}
+			}
+		}
+	}
+	return cameFrom;
 }
 
 void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal)
