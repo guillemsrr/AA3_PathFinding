@@ -10,5 +10,6 @@ public:
 	~Node();
 	Vector2D m_cell;
 	std::vector<Node*> adjacencyList;
+	int h;
 };
 

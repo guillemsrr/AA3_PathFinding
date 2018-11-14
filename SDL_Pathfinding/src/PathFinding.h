@@ -13,5 +13,6 @@ public:
 	static void Dijkstra(Graph* graph, Node* start, Node* goal);
 	static void GreedyBestFirstSearch(Graph* graph, Node* start, Node* goal);
 	static void A(Graph* graph, Node* start, Node* goal);
+	static int ComputeH(Node* n, Node* goal);
 };
 

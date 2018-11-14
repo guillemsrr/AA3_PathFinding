@@ -35,7 +35,8 @@ void Graph::initNodesMap(std::vector<std::vector<int>> *terrain)
 			//std::cout << "["<<row<<", "<<col<<"] = "<<(*terrain)[row][col] << "  ";
 			//std::cout << "["<<row<<", "<<col<<"]  ";
 
-			nodesMap.emplace(std::make_pair(row, col), new Node(Vector2D(col, row)));
+			if((*terrain)[row][col]!=0)
+				nodesMap.emplace(std::make_pair(row, col), new Node(Vector2D(col, row)));
 		}
 		//std::cout << std::endl << std::endl;
 	}
