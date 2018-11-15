@@ -55,6 +55,7 @@ void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal
 	std::cout << "Coin: [" << goal->m_cell.x << "," << goal->m_cell.y << "]" << std::endl;
 
 	std::vector<Node*> frontera;
+	std::priority_queue<std::pair<Node*, int>> frontier;
 	frontera.push_back(start);
 	std::map<Node*, Node*> visitados;
 	Node* current;
@@ -67,7 +68,32 @@ void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal
 	}
 
 	//Aplico algoritmo GBFS
-	
+	frontier.push(std::make_pair(start, 0));
+
+	while (!frontier.empty())
+	{
+		current = frontier.top().first;
+
+		if (current == goal)
+		{
+			//Early exit
+
+		}
+
+		for (int i = 0; i < current->adjacencyList.size(); i++)
+		{
+			if (visitados.count(current->adjacencyList[i]) <= 0)
+			{
+				frontier.push(std::make_pair(current->adjacencyList[i], current->adjacencyList[i]->h));
+				visitados.emplace(current->adjacencyList[i], current);
+			}
+			
+		}
+
+	}
+
+
+	std::cout << "Ya" << std::endl;
 
 	
 }
