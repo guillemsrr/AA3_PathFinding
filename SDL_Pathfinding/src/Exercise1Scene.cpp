@@ -1,12 +1,11 @@
 #include "Exercise1Scene.h"
 
-Node* start;
 
 void Exercise1Scene::init()
 {
 	std::srand(1);//seed is set to 1
-
-	draw_grid = false;
+	system("cls");
+	draw_grid = true;
 
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
@@ -24,29 +23,23 @@ void Exercise1Scene::init()
 		rand_cell = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 	agents[0]->setPosition(cell2pix(rand_cell));
 
-	//DEBUG
-	agents[0]->setPosition(cell2pix(Vector2D(1,1)));
-
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);
 	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell) < 3))
 		coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
-
-	std::cout << "Coin position: " << coinPosition.x << " " << coinPosition.y << std::endl;
-	//DEBUG
-	//coinPosition = Vector2D(num_cell_x/2, num_cell_y/2);
-
 }
 
-Exercise1Scene::Exercise1Scene(bool weight, int ex)
+Exercise1Scene::Exercise1Scene(int ex)
 {
 	init();
 
-	if (weight)
+	if (ex == 3 || ex== 5)
 	{
 		CreateSpecificWeights();
+		//CreateRandomWeights();
 	}
-	
+
+	GetAlghorithmTitle();
 	m_graph = new Graph(&terrain);
 	minVisited = 100000;
 	maxVisited = 0;
@@ -130,7 +123,10 @@ void Exercise1Scene::draw()
 
 const char* Exercise1Scene::getTitle()
 {
-	return "SDL Path Finding :: Exercise 1";
+	std::string title = "SDL Path Finding :: Exercise 1 ";
+	title.append(algoritmTitle);
+	std::cout << title << std::endl;
+	return title.c_str();//no funciona
 }
 
 void Exercise1Scene::drawMaze()
@@ -147,9 +143,9 @@ void Exercise1Scene::drawMaze()
 			case 0:
 				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 0, 0, 255, 255);
 				break;
-			case 1: // Do not draw if it is not necessary (bg is already black)
 			default:
-				continue;
+				SDL_SetRenderDrawColor(TheApp::Instance()->getRenderer(), 100*terrain[j][i] - 100, 0, 0, 255);
+				break;
 			}
 
 			coords = cell2pix(Vector2D(i, j)) - Vector2D((float)CELL_SIZE / 2, (float)CELL_SIZE / 2);
@@ -243,30 +239,29 @@ void Exercise1Scene::CreateRandomWeights()
 	{
 		for (int j = 0; j < num_cell_y; j++)//columns
 		{
-			if (terrain[i][j] == 1)
-				terrain[i][j] = MIN_WEIGHT + rand() % (MAX_WEIGHT - MIN_WEIGHT + 1);
+			if (terrain[j][i] == 1)
+				terrain[j][i] = MIN_WEIGHT + rand() % (MAX_WEIGHT - MIN_WEIGHT + 1);
 		}
 	}
 }
 
 void Exercise1Scene::CreateSpecificWeights()
 {
-	terrain[num_cell_x / 2][num_cell_y / 2] = 4;
-	terrain[num_cell_x / 2 -1][num_cell_y / 2] = 2;
-	terrain[num_cell_x / 2 +1][num_cell_y / 2] = 2;
-	terrain[num_cell_x / 2 ][num_cell_y / 2 -1] = 2;
-	terrain[num_cell_x / 2 ][num_cell_y / 2 +1] = 2;
-	terrain[num_cell_x / 2 +1][num_cell_y / 2 +1] = 2;
-	terrain[num_cell_x / 2 -1][num_cell_y / 2 -1] = 2;
-	terrain[num_cell_x / 2 -1][num_cell_y / 2 +1] = 2;
-	terrain[num_cell_x / 2 +1][num_cell_y / 2 -1] = 2;
+	terrain[num_cell_y/ 2][num_cell_x / 2] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 -1][num_cell_x / 2] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 +1][num_cell_x / 2] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 ][num_cell_x / 2 -1] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 ][num_cell_x / 2 +1] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 +1][num_cell_x / 2 +1] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 -1][num_cell_x / 2 -1] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 -1][num_cell_x / 2 +1] = MAX_WEIGHT;
+	terrain[num_cell_y/ 2 +1][num_cell_x / 2 -1] = MAX_WEIGHT;
 }
 
 void Exercise1Scene::CreatePathToCoin()
 {
 	Vector2D agentCell = pix2cell(agents[0]->getPosition());
 	Node* playerNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
-	start = playerNode;
 	coinNode = m_graph->nodesMap.at(Cell2Pair(coinPosition));
 	
 	std::map<Node*, Node*> visited;
@@ -355,4 +350,25 @@ void Exercise1Scene::PrintStatistics()
 		maxVisited = numVisited;
 
 	meanVisited += numVisited;
+}
+
+void Exercise1Scene::GetAlghorithmTitle()
+{
+	switch (exercise)
+	{
+	case 2:
+		algoritmTitle = "Breadth First Search";
+		break;
+	case 3:
+		algoritmTitle = "Dijkstra";
+		break;
+	case 4:
+		algoritmTitle = "Greedy Best First Search";
+		break;
+	case 5:
+		algoritmTitle = "A*";
+		break;
+	default:
+		break;
+	}
 }

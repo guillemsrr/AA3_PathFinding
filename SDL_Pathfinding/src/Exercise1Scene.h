@@ -13,7 +13,7 @@ class Exercise1Scene :
 	public Scene
 {
 public:
-	Exercise1Scene(bool weight, int ex);
+	Exercise1Scene(int ex);
 	~Exercise1Scene();
 	void update(float dtime, SDL_Event *event);
 	void draw();
@@ -42,7 +42,7 @@ private:
 	//New Code
 	void init();
 	Graph* m_graph;
-	const int MAX_WEIGHT = 5;
+	const int MAX_WEIGHT = 6;
 	const int MIN_WEIGHT = 1;
 	void CreateRandomWeights();
 	void CreateSpecificWeights();
@@ -61,5 +61,8 @@ private:
 	int numFindings;
 	const int maxNumFindings = 10;
 	void PrintStatistics();
+
+	std::string algoritmTitle;
+	void GetAlghorithmTitle();
 };
 
