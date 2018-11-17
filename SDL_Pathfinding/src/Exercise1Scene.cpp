@@ -295,8 +295,15 @@ void Exercise1Scene::CreatePathToCoin()
 		break;
 	case 4:
 		///GBFS
+		
+		//PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
+		visited=PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
+		numVisited = visited.size();
+		visitedNodesPosition.clear();
+		GetVisitedNodesPosition(visited);
+		SetPath(visited);
 
-		PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
+
 		break;
 	case 5:
 		///A*

@@ -127,14 +127,15 @@ std::map<Node*, Node*> PathFinding::DijkstraV2(Graph * graph, Node * start, Node
 	return cameFrom;
 }
 
-void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal)
+std::map<Node*, Node*> PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal)
 {
-	std::cout << "Player: [" << start->m_cell.x << "," << start->m_cell.y << "]" << std::endl;
-	std::cout << "Coin: [" << goal->m_cell.x << "," << goal->m_cell.y << "]" << std::endl;
+	//std::cout << "Player: [" << start->m_cell.x << "," << start->m_cell.y << "]" << std::endl;
+	//std::cout << "Coin: [" << goal->m_cell.x << "," << goal->m_cell.y << "]" << std::endl;
 
-	std::vector<Node*> frontera;
-	std::priority_queue<std::pair<Node*, int>> frontier;
-	frontera.push_back(start);
+	//std::vector<Node*> frontera;
+	std::priority_queue<std::pair<Node*, int>, std::vector<std::pair<Node*, int>>, Order> frontier2;
+	//std::priority_queue<std::pair<Node*, int>> frontier;
+	//frontera.push_back(start);
 	std::map<Node*, Node*> visitados;
 	Node* current;
 
@@ -146,34 +147,33 @@ void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal
 	}
 
 	//Aplico algoritmo GBFS
-	frontier.push(std::make_pair(start, 0));
+	frontier2.push(std::make_pair(start, 0));
 
-	while (!frontier.empty())
+	while (!frontier2.empty())
 	{
-		current = frontier.top().first;
+		current = frontier2.top().first;
 
 		if (current == goal)
 		{
 			//Early exit
-
+			return visitados;
 		}
-
-		for (int i = 0; i < current->adjacencyList.size(); i++)
+		else
 		{
-			if (visitados.count(current->adjacencyList[i]) <= 0)
+			frontier2.pop();
+			for (int i = 0; i < current->adjacencyList.size(); i++)
 			{
-				frontier.push(std::make_pair(current->adjacencyList[i], current->adjacencyList[i]->h));
-				visitados.emplace(current->adjacencyList[i], current);
+				if (visitados.count(current->adjacencyList[i]) <= 0)
+				{
+					frontier2.push(std::make_pair(current->adjacencyList[i], current->adjacencyList[i]->h));
+					//visitados.emplace(current->adjacencyList[i], current);
+					visitados[current->adjacencyList[i]] = current;
+				}
 			}
-			
 		}
-
 	}
-
-
-	std::cout << "Ya" << std::endl;
-
-	
+	//std::cout << "Ya" << std::endl;
+	return visitados;	
 }
 
 std::map<Node*, Node*> PathFinding::A(Graph * graph, Node * start, Node * goal)
