@@ -62,7 +62,8 @@ private:
 	const int maxNumFindings = 10;
 	void PrintStatistics();
 
-	std::string algoritmTitle;
-	void GetAlghorithmTitle();
+	std::string algorithmTitle;
+	void GetAlghorithmTitle(int ex);
+	void PrintTitle();
 };
 

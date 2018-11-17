@@ -134,6 +134,8 @@
     <ClCompile Include="..\src\Agent.cpp" />
     <ClCompile Include="..\src\Edge.cpp" />
     <ClCompile Include="..\src\Exercise1Scene.cpp" />
+    <ClCompile Include="..\src\Exercise2Scene.cpp" />
+    <ClCompile Include="..\src\Exercise3Scene.cpp" />
     <ClCompile Include="..\src\Graph.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Node.cpp" />
@@ -148,6 +150,8 @@
     <ClInclude Include="..\src\Agent.h" />
     <ClInclude Include="..\src\Edge.h" />
     <ClInclude Include="..\src\Exercise1Scene.h" />
+    <ClInclude Include="..\src\Exercise2Scene.h" />
+    <ClInclude Include="..\src\Exercise3Scene.h" />
     <ClInclude Include="..\src\Graph.h" />
     <ClInclude Include="..\src\Node.h" />
     <ClInclude Include="..\src\Path.h" />

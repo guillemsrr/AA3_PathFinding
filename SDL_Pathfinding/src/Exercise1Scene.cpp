@@ -3,9 +3,9 @@
 
 void Exercise1Scene::init()
 {
-	std::srand(1);//seed is set to 1
+	std::srand(2);//seed is set to 1
 	system("cls");
-	draw_grid = true;
+	draw_grid = false;
 
 	num_cell_x = SRC_WIDTH / CELL_SIZE;
 	num_cell_y = SRC_HEIGHT / CELL_SIZE;
@@ -20,13 +20,13 @@ void Exercise1Scene::init()
 	// set agent position coords to the center of a random cell
 	Vector2D rand_cell(-1, -1);
 	while (!isValidCell(rand_cell))
-		rand_cell = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	agents[0]->setPosition(cell2pix(rand_cell));
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);
 	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell) < 3))
-		coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 }
 
 Exercise1Scene::Exercise1Scene(int ex)
@@ -39,7 +39,9 @@ Exercise1Scene::Exercise1Scene(int ex)
 		//CreateRandomWeights();
 	}
 
-	GetAlghorithmTitle();
+	//title
+	GetAlghorithmTitle(ex);
+
 	m_graph = new Graph(&terrain);
 	minVisited = 100000;
 	maxVisited = 0;
@@ -124,9 +126,9 @@ void Exercise1Scene::draw()
 const char* Exercise1Scene::getTitle()
 {
 	std::string title = "SDL Path Finding :: Exercise 1 ";
-	title.append(algoritmTitle);
-	std::cout << title << std::endl;
-	return title.c_str();//no funciona
+	//title.append(algorithmTitle);
+	//return title.c_str();//no funciona
+	return "SDL Path Finding :: Exercise 1 ";
 }
 
 void Exercise1Scene::drawMaze()
@@ -343,6 +345,7 @@ void Exercise1Scene::PaintVisitedNodes()
 void Exercise1Scene::PrintStatistics()
 {
 	system("cls");
+	PrintTitle();
 	std::cout << "Min visited: " << minVisited << " max visited: " << maxVisited << " mean: " << meanVisited / numFindings << std::endl;
 	if (numVisited < minVisited)
 		minVisited = numVisited;
@@ -352,23 +355,31 @@ void Exercise1Scene::PrintStatistics()
 	meanVisited += numVisited;
 }
 
-void Exercise1Scene::GetAlghorithmTitle()
+void Exercise1Scene::GetAlghorithmTitle(int ex)
 {
-	switch (exercise)
+	switch (ex)
 	{
 	case 2:
-		algoritmTitle = "Breadth First Search";
+		algorithmTitle = "Breadth First Search";
 		break;
 	case 3:
-		algoritmTitle = "Dijkstra";
+		algorithmTitle = "Dijkstra";
 		break;
 	case 4:
-		algoritmTitle = "Greedy Best First Search";
+		algorithmTitle = "Greedy Best First Search";
 		break;
 	case 5:
-		algoritmTitle = "A*";
+		algorithmTitle = "A*";
 		break;
 	default:
+		algorithmTitle = "default";
 		break;
 	}
+	PrintTitle();
+}
+
+void Exercise1Scene::PrintTitle() {
+	std::string title = "SDL Path Finding :: Exercise 1 ";
+	title.append(algorithmTitle);
+	std::cout << title << std::endl;
 }

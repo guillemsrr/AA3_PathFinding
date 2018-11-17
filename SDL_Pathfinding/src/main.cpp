@@ -5,6 +5,8 @@
 #include "SDL_SimpleApp.h"
 #include "ScenePathFindingMouse.h"
 #include "Exercise1Scene.h"
+#include "Exercise2Scene.h"
+#include "Exercise3Scene.h"
 
 using namespace std;
 
@@ -59,7 +61,6 @@ int main(int argc, char ** argv)
 			{
 				delete(curr_scene);
 				curr_scene = new Exercise1Scene(3);//we need to create weights
-				//curr_scene->CreateRandomWeights();
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_4)//Greedy
@@ -72,14 +73,19 @@ int main(int argc, char ** argv)
 			{
 				delete(curr_scene);
 				curr_scene = new Exercise1Scene(5);//we need to create weights
-				curr_scene->CreateRandomWeights();
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_6)//Exercici 2 A*
 			{
+				delete(curr_scene);
+				curr_scene = new Exercise2Scene();
+				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_7)//Exercici 3 D*
 			{
+				delete(curr_scene);
+				curr_scene = new Exercise3Scene();
+				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if ((event.key.keysym.scancode == SDL_SCANCODE_Q) || (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 			{

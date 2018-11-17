@@ -90,6 +90,7 @@ void Graph::CreateConnection(Node* node1, Node* node2, int weight = 1)
 	node2->adjacencyList.push_back(node1);
 	edgesMap.emplace(std::make_pair(node1, node2), new Edge(node1, node2, weight));
 }
+
 std::vector<Node*> Graph::GetShortestPath(std::map<Node*, Node*> visited, Node* goal)
 {
 	Node* comes_from = goal;

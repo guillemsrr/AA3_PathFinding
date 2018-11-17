@@ -176,8 +176,11 @@ void PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal
 	
 }
 
-void PathFinding::A(Graph * graph, Node * start, Node * goal)
+std::map<Node*, Node*> PathFinding::A(Graph * graph, Node * start, Node * goal)
 {
+	std::map<Node*, Node*> visited;
+
+	return visited;
 }
 
 std::map<Node*, Node*> PathFinding::VisitedByDijkstra(std::map<Node*, std::pair<Node*, int>> d)
