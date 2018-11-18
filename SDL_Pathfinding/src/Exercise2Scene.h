@@ -53,7 +53,7 @@ private:
 	std::vector<Vector2D>visitedNodesPosition;
 
 	//Exercice2 specific
-	const int numCoins = 5;
+	const int numCoins = 10;
 	std::vector<Vector2D> coinPositions;
 	Vector2D currentCoinPosition;
 	bool validCoinPosition(Vector2D coinPos);

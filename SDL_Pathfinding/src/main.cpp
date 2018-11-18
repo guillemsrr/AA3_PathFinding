@@ -19,7 +19,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new Exercise1Scene(3);
+	Scene *curr_scene = new Exercise2Scene();
 	app->setWindowTitle(curr_scene->getTitle());
 
 	
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_3)//Dijkstra
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(3);//we need to create weights
+				curr_scene = new Exercise1Scene(3);
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_4)//Greedy
@@ -72,7 +72,7 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_5)//A*
 			{
 				delete(curr_scene);
-				curr_scene = new Exercise1Scene(5);//we need to create weights
+				curr_scene = new Exercise1Scene(5);
 				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if (event.key.keysym.scancode == SDL_SCANCODE_6)//Exercici 2 A*

@@ -39,7 +39,7 @@ Exercise2Scene::Exercise2Scene()
 	init();
 
 	m_graph = new Graph(&terrain);
-
+	
 	CreatePathToCoin();
 }
 
@@ -73,7 +73,7 @@ void Exercise2Scene::update(float dtime, SDL_Event *event)
 	agents[0]->update(steering_force, dtime, event);
 
 	//if we have arrived to the coin, replace it in a random cell!
-	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == currentCoinPosition))
+	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == currentCoinPosition) && !coinPositions.empty())
 	{
 		//compute new path
 		CreatePathToCoin();
@@ -250,27 +250,42 @@ void Exercise2Scene::CreatePathToCoin()
 	Vector2D agentCell = pix2cell(agents[0]->getPosition());
 	Node* playerNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
 
-	std::map<Node*, Node*> visited;
 	std::map<Node*, Node*> minVisited;
-
+	bool firstIteration = true;
 	for each(Vector2D coinPos in coinPositions)
 	{
-		Node* coinNode = m_graph->nodesMap.at(Cell2Pair(coinPos));
-		visited = PathFinding::A(m_graph, playerNode, coinNode);
+		Node* node = m_graph->nodesMap.at(Cell2Pair(coinPos));
+		m_graph->CreateHeuristics(node);
+		std::map<Node*, Node*> visited = PathFinding::A(m_graph, playerNode, node);
 		if (visited.size() < minVisited.size())
 		{
 			minVisited = visited;
 			currentCoinPosition = coinPos;
+			coinNode = node;
+		}
+		if (firstIteration) // to enter only the first time
+		{
+			minVisited = visited;
+			currentCoinPosition = coinPos;
+			coinNode = node;
+			firstIteration = false;
 		}
 	}
-	//we need to eliminate currentCoinPosition to vector coinPositions
+
+	//we need to eliminate currentCoinPosition from vector coinPositions
+	for (int i = 0; i < coinPositions.size(); i++)
+	{
+		if (coinPositions[i] == currentCoinPosition)
+		{
+			coinPositions.erase(coinPositions.begin() + i);
+		}
+	}
 
 	SetPath(minVisited);
 }
 
 std::pair<int, int> Exercise2Scene::Cell2Pair(Vector2D cell)
 {
-	//std::cout << "cell " << cell.x << " "<<cell.y << std::endl;
 	return std::make_pair(cell.y, cell.x);
 }
 

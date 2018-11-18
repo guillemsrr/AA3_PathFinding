@@ -127,26 +127,24 @@ std::map<Node*, Node*> PathFinding::DijkstraV2(Graph * graph, Node * start, Node
 	return cameFrom;
 }
 
+std::map<Node*, Node*> PathFinding::VisitedByDijkstra(std::map<Node*, std::pair<Node*, int>> d)
+{
+	std::map<Node*, Node*> visited;
+
+	for (auto it = d.begin(); it != d.end(); it++)
+	{
+		visited[it->first] = it->second.first;
+	}
+	return visited;
+}
+
 std::map<Node*, Node*> PathFinding::GreedyBestFirstSearch(Graph * graph, Node * start, Node * goal)
 {
-	//std::cout << "Player: [" << start->m_cell.x << "," << start->m_cell.y << "]" << std::endl;
-	//std::cout << "Coin: [" << goal->m_cell.x << "," << goal->m_cell.y << "]" << std::endl;
-
-	//std::vector<Node*> frontera;
 	std::priority_queue<std::pair<Node*, int>, std::vector<std::pair<Node*, int>>, Order> frontier2;
-	//std::priority_queue<std::pair<Node*, int>> frontier;
-	//frontera.push_back(start);
 	std::map<Node*, Node*> visitados;
+	visitados.emplace(start, nullptr);
 	Node* current;
 
-	//Recorro todos los nodos para asignarles su heur�stica
-	for (std::map<std::pair<int, int>, Node*>::iterator it=graph->nodesMap.begin(); it!=graph->nodesMap.end(); it++)
-	{
-		it->second->h = ComputeH(it->second, goal);
-		//std::cout << "[" << it->first.first << "," << it->first.second << "]" << ComputeH(it->second, goal) << std::endl;
-	}
-
-	//Aplico algoritmo GBFS
 	frontier2.push(std::make_pair(start, 0));
 
 	while (!frontier2.empty())
@@ -166,42 +164,49 @@ std::map<Node*, Node*> PathFinding::GreedyBestFirstSearch(Graph * graph, Node * 
 				if (visitados.count(current->adjacencyList[i]) <= 0)
 				{
 					frontier2.push(std::make_pair(current->adjacencyList[i], current->adjacencyList[i]->h));
-					//visitados.emplace(current->adjacencyList[i], current);
 					visitados[current->adjacencyList[i]] = current;
 				}
 			}
 		}
 	}
-	//std::cout << "Ya" << std::endl;
 	return visitados;	
 }
 
 std::map<Node*, Node*> PathFinding::A(Graph * graph, Node * start, Node * goal)
 {
-	std::map<Node*, Node*> visited;
+	std::priority_queue<std::pair<Node*, int>, std::vector<std::pair<Node*, int>>, Order> frontier;
+	std::map<Node*, Node*> cameFrom;
+	std::map<Node*, int> costSoFar;
 
-	return visited;
-}
+	frontier.push(std::make_pair(start, 0));
+	cameFrom[start] = nullptr;
+	costSoFar[start] = 0;
 
-std::map<Node*, Node*> PathFinding::VisitedByDijkstra(std::map<Node*, std::pair<Node*, int>> d)
-{
-	std::map<Node*, Node*> visited;
+	Node *current;
 
-	for (auto it = d.begin(); it != d.end(); it++)
+	while (!frontier.empty())
 	{
-		visited[it->first] = it->second.first;
+		current = frontier.top().first;
+
+		if (current == goal)
+		{
+			//Goal
+			return cameFrom;
+		}
+		else
+		{
+			frontier.pop();
+			for each(Node *next in current->adjacencyList)
+			{
+				int newCost = costSoFar[current] + graph->edgesMap[std::make_pair(current, next)]->weight;
+				if (costSoFar.count(next) == 0 || newCost < costSoFar[next])
+				{
+					costSoFar[next] = newCost;
+					frontier.push(std::make_pair(next, newCost + next->h));//only difference with Dijkstra
+					cameFrom[next] = current;
+				}
+			}
+		}
 	}
-	return visited;
-}
-
-int PathFinding::ComputeH(Node * n, Node * goal)
-{
-	//Chebyshev
-	int normalCost=1;
-	int diagnoalCost = 1;
-
-	int dx = abs(n->m_cell.x - goal->m_cell.x);
-	int dy = abs(n->m_cell.y - goal->m_cell.y);
-
-	return normalCost * (dy + dx) + (diagnoalCost - 2 * normalCost) * std::min(dy, dx);
+	return cameFrom;
 }

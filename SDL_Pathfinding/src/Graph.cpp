@@ -1,4 +1,4 @@
-#include "Graph.h"
+﻿#include "Graph.h"
 
 
 
@@ -21,7 +21,7 @@ Graph::Graph(std::vector<std::vector<int>> *terrain)
 
 Graph::~Graph()
 {
-	//remove maps?�
+	//remove maps?¿
 }
 
 
@@ -102,4 +102,25 @@ std::vector<Node*> Graph::GetShortestPath(std::map<Node*, Node*> visited, Node* 
 	}
 
 	return shortestPath;
+}
+
+void Graph::CreateHeuristics(Node* goal)
+{
+	//Recorro todos los nodos para asignarles su heur�stica
+	for (std::map<std::pair<int, int>, Node*>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++)
+	{
+		it->second->h = Chebyshev(it->second, goal);
+		//std::cout << "[" << it->first.first << "," << it->first.second << "]" << ComputeH(it->second, goal) << std::endl;
+	}
+}
+
+int Graph::Chebyshev(Node * n, Node * goal)
+{
+	int normalCost = 1;
+	int diagnoalCost = 1;
+
+	int dx = abs(n->m_cell.x - goal->m_cell.x);
+	int dy = abs(n->m_cell.y - goal->m_cell.y);
+
+	return normalCost * (dy + dx) + (diagnoalCost - 2 * normalCost) * std::min(dy, dx);
 }

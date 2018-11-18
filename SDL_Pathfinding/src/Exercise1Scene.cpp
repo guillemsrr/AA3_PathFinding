@@ -32,8 +32,9 @@ void Exercise1Scene::init()
 Exercise1Scene::Exercise1Scene(int ex)
 {
 	init();
+	exercise = ex;
 
-	if (ex == 3 || ex== 5)
+	if (ex == 3 || ex== 5) //Dijkstra or A*
 	{
 		CreateSpecificWeights();
 		//CreateRandomWeights();
@@ -43,11 +44,13 @@ Exercise1Scene::Exercise1Scene(int ex)
 	GetAlghorithmTitle(ex);
 
 	m_graph = new Graph(&terrain);
+
+	//init statistics
 	minVisited = 100000;
 	maxVisited = 0;
 	meanVisited = 0;
 	numFindings = 0;
-	exercise = ex;
+
 	CreatePathToCoin();
 }
 
@@ -269,51 +272,30 @@ void Exercise1Scene::CreatePathToCoin()
 	std::map<Node*, Node*> visited;
 	switch (exercise)
 	{
-	case 1:
-		///DEFAULT CLICK SCENE
-
-
-		break;
 	case 2:
 		///BFS
-
 		visited = PathFinding::BreadthFirstSearch(playerNode, coinNode);
-		numVisited = visited.size();
-		visitedNodesPosition.clear();
-		GetVisitedNodesPosition(visited);
-		SetPath(visited);
 		break;
 	case 3:
 		///DIJKSTRA
-
-		//visited = PathFinding::VisitedByDijkstra(PathFinding::Dijkstra(m_graph, playerNode, coinNode));
 		visited = PathFinding::DijkstraV2(m_graph, playerNode, coinNode);
-		numVisited = visited.size();
-		visitedNodesPosition.clear();
-		GetVisitedNodesPosition(visited);
-		SetPath(visited);
 		break;
 	case 4:
 		///GBFS
-		
-		//PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
-		visited=PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
-		numVisited = visited.size();
-		visitedNodesPosition.clear();
-		GetVisitedNodesPosition(visited);
-		SetPath(visited);
-
-
+		m_graph->CreateHeuristics(coinNode);
+		visited = PathFinding::GreedyBestFirstSearch(m_graph, playerNode, coinNode);
 		break;
 	case 5:
 		///A*
-
-
+		m_graph->CreateHeuristics(coinNode);
+		visited = PathFinding::A(m_graph, playerNode, coinNode);
 		break;
-
 	}
 
-	
+	numVisited = visited.size();
+	visitedNodesPosition.clear();
+	GetVisitedNodesPosition(visited);
+	SetPath(visited);
 }
 
 std::pair<int, int> Exercise1Scene::Cell2Pair(Vector2D cell)
