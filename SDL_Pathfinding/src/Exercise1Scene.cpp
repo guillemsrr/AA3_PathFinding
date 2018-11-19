@@ -36,8 +36,8 @@ Exercise1Scene::Exercise1Scene(int ex)
 
 	if (ex == 3 || ex== 5) //Dijkstra or A*
 	{
-		CreateSpecificWeights();
-		//CreateRandomWeights();
+		//CreateSpecificWeights();
+		CreateRandomWeights();
 	}
 
 	//title
@@ -244,7 +244,8 @@ void Exercise1Scene::CreateRandomWeights()
 	{
 		for (int j = 0; j < num_cell_y; j++)//columns
 		{
-			if (terrain[j][i] == 1)
+			int x = rand() % 100;
+			if (terrain[j][i] == 1 && x < 40)
 				terrain[j][i] = MIN_WEIGHT + rand() % (MAX_WEIGHT - MIN_WEIGHT + 1);
 		}
 	}
