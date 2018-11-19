@@ -13,5 +13,6 @@ public:
 	virtual const char* getTitle() { return ""; };
 	virtual void CreateRandomWeights();
 	int exercise;
+	bool flag = true;
 };
 

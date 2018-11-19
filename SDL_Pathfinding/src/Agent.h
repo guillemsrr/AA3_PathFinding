@@ -20,7 +20,6 @@ private:
 	Vector2D velocity;
 	Vector2D target;
 
-	Path path;
 	int currentTargetIndex;
 
 	float mass;
@@ -39,6 +38,9 @@ private:
 public:
 	Agent();
 	~Agent();
+
+	Path path;
+
 	void addPathPoint(Vector2D point);
 	int getCurrentTargetIndex();
 	void setCurrentTargetIndex(int idx);

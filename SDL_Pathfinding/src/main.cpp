@@ -95,6 +95,10 @@ int main(int argc, char ** argv)
 			{
 				app->setFullScreen();
 			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_J)
+			{
+				curr_scene->flag = false;
+			}
 			break;
 		case SDL_QUIT:
 			quit = true;

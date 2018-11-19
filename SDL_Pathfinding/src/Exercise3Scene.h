@@ -23,7 +23,7 @@ private:
 	Vector2D coinPosition;
 	Vector2D randomEnemyPosition;
 
-	bool flag = false;
+	//bool flag = false;
 
 	int num_cell_x;
 	int num_cell_y;

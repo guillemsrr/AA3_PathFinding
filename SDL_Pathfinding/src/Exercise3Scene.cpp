@@ -73,15 +73,14 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && !flag)
+	if (/*EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) &&*/ !flag)
 	{
 		std::cout << "Enemy Near" << std::endl;
+		agents[0]->path.points.clear();
+		agents[0]->setCurrentTargetIndex(-1);
+		agents[0]->setVelocity(Vector2D(0, 0));
 		CreatePathToCoin();
 		flag = true;
-	}
-	else
-	{
-		flag = false;
 	}
 
 	//AGENT
@@ -92,27 +91,27 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
 	{
 		coinPosition = Vector2D(-1, -1);
-		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 3))
+		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 10))
 			coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 
 		//compute new path
 		CreatePathToCoin();
 	}
 
-	//ENEMY
-	steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
-	agents[1]->update(steering_force, dtime, event);
+	////ENEMY
+	//steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
+	//agents[1]->update(steering_force, dtime, event);
 
-	// if we have arrived to the coin, replace it in a random cell!
-	if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
-	{
-		randomEnemyPosition = Vector2D(-1, -1);
-		while ((!isValidCell(randomEnemyPosition)) || (Vector2D::Distance(randomEnemyPosition, pix2cell(agents[1]->getPosition())) < 3))
-			randomEnemyPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+	//// if we have arrived to the coin, replace it in a random cell!
+	//if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
+	//{
+	//	randomEnemyPosition = Vector2D(-1, -1);
+	//	while ((!isValidCell(randomEnemyPosition)) || (Vector2D::Distance(randomEnemyPosition, pix2cell(agents[1]->getPosition())) < 3))
+	//		randomEnemyPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 
-		//compute new path
-		CreateEnemyPath();
-	}
+	//	//compute new path
+	//	CreateEnemyPath();
+	//}
 }
 
 
