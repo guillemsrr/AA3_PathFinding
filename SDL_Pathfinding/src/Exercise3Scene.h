@@ -21,6 +21,9 @@ public:
 private:
 	std::vector<Agent*> agents;
 	Vector2D coinPosition;
+	Vector2D randomEnemyPosition;
+
+	bool flag = false;
 
 	int num_cell_x;
 	int num_cell_y;
@@ -44,14 +47,18 @@ private:
 	Graph* m_graph;
 	const int MAX_WEIGHT = 6;
 	const int MIN_WEIGHT = 1;
+	const int MIN_ENEMY_DIST = 3;
 	void CreateRandomWeights();
 	void CreateSpecificWeights();
 	Node* coinNode;
 	void CreatePathToCoin();
+	void CreateEnemyPath();
 	void SetPath(std::map<Node*, Node*> v);
+	void SetRandomPath(std::map<Node*, Node*> visited, Node* randomNode);
 	std::pair<int, int> Cell2Pair(Vector2D);
 	void GetVisitedNodesPosition(std::map<Node*, Node*> visited);
 	void PaintVisitedNodes();
 	std::vector<Vector2D>visitedNodesPosition;
+	bool EnemyNear(Vector2D agent, Vector2D enemy);
 };
 

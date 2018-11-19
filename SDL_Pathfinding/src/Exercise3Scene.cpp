@@ -3,7 +3,6 @@
 
 void Exercise3Scene::init()
 {
-	std::srand(1);//seed is set to 1
 	system("cls");
 	draw_grid = false;
 
@@ -17,11 +16,21 @@ void Exercise3Scene::init()
 	agent->setTarget(Vector2D(-20, -20));
 	agents.push_back(agent);
 
+	Agent *agent2 = new Agent;
+	agent2->loadSpriteTexture("../res/zombie1.png", 4);
+	agent2->setTarget(Vector2D(-20, -20));
+	agents.push_back(agent2);
+
 	// set agent position coords to the center of a random cell
 	Vector2D rand_cell(-1, -1);
 	while (!isValidCell(rand_cell))
 		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 	agents[0]->setPosition(cell2pix(rand_cell));
+
+	//set enemy position in a random cell, far from the agent
+	while (!isValidCell(rand_cell) || EnemyNear(agents[0]->getPosition(), cell2pix(rand_cell)))
+		rand_cell = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+	agents[1]->setPosition(cell2pix(rand_cell));
 
 	// set the coin in a random cell (but at least 3 cells far from the agent)
 	coinPosition = Vector2D(-1, -1);
@@ -35,6 +44,7 @@ Exercise3Scene::Exercise3Scene()
 
 	m_graph = new Graph(&terrain);
 	CreatePathToCoin();
+	CreateEnemyPath();
 }
 
 Exercise3Scene::~Exercise3Scene()
@@ -63,6 +73,18 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
+	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && !flag)
+	{
+		std::cout << "Enemy Near" << std::endl;
+		CreatePathToCoin();
+		flag = true;
+	}
+	else
+	{
+		flag = false;
+	}
+
+	//AGENT
 	Vector2D steering_force = agents[0]->Behavior()->SimplePathFollowing(agents[0], dtime);
 	agents[0]->update(steering_force, dtime, event);
 
@@ -75,6 +97,21 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 
 		//compute new path
 		CreatePathToCoin();
+	}
+
+	//ENEMY
+	steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
+	agents[1]->update(steering_force, dtime, event);
+
+	// if we have arrived to the coin, replace it in a random cell!
+	if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
+	{
+		randomEnemyPosition = Vector2D(-1, -1);
+		while ((!isValidCell(randomEnemyPosition)) || (Vector2D::Distance(randomEnemyPosition, pix2cell(agents[1]->getPosition())) < 3))
+			randomEnemyPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+
+		//compute new path
+		CreateEnemyPath();
 	}
 }
 
@@ -100,7 +137,11 @@ void Exercise3Scene::draw()
 
 	PaintVisitedNodes();
 	drawCoin();
-	agents[0]->draw();
+
+	for (int i = 0; i < agents.size(); i++)
+	{
+		agents[i]->draw();
+	}
 }
 
 const char* Exercise3Scene::getTitle()
@@ -247,7 +288,30 @@ void Exercise3Scene::CreatePathToCoin()
 	coinNode = m_graph->nodesMap.at(Cell2Pair(coinPosition));
 
 	std::map<Node*, Node*> visited;
-	
+	m_graph->CreateHeuristics(coinNode);
+	visited = PathFinding::A(m_graph, playerNode, coinNode);
+
+	visitedNodesPosition.clear();
+	GetVisitedNodesPosition(visited);
+	SetPath(visited);
+}
+
+void Exercise3Scene::CreateEnemyPath()
+{
+	randomEnemyPosition = Vector2D(-1, -1);
+	while (!isValidCell(randomEnemyPosition))
+		randomEnemyPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+	Vector2D agentCell = pix2cell(agents[1]->getPosition());
+	Node* enemyNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
+	Node* randomNode = m_graph->nodesMap.at(Cell2Pair(randomEnemyPosition));
+
+	std::map<Node*, Node*> visited;
+	m_graph->CreateHeuristics(randomNode);
+	visited = PathFinding::GreedyBestFirstSearch(m_graph, enemyNode, randomNode);
+
+	SetRandomPath(visited, randomNode);
+
 }
 
 std::pair<int, int> Exercise3Scene::Cell2Pair(Vector2D cell)
@@ -266,6 +330,16 @@ void Exercise3Scene::SetPath(std::map<Node*, Node*> visited)
 	}
 }
 
+void Exercise3Scene::SetRandomPath(std::map<Node*, Node*> visited, Node* randomNode)
+{
+	std::vector<Node*> shortestPath = Graph::GetShortestPath(visited, randomNode);
+
+	for (std::vector<Node*>::reverse_iterator it = shortestPath.rbegin(); it != shortestPath.rend(); ++it)
+	{
+		agents[1]->addPathPoint(cell2pix((*it)->m_cell));
+	}
+}
+
 void Exercise3Scene::GetVisitedNodesPosition(std::map<Node*, Node*> visited)
 {
 	for (std::map<Node*, Node*>::iterator it = visited.begin(); it != visited.end(); it++)
@@ -281,4 +355,9 @@ void Exercise3Scene::PaintVisitedNodes()
 	{
 		draw_circle(TheApp::Instance()->getRenderer(), (int)pos.x, (int)pos.y, 15, 75, 75, 0, 255);
 	}
+}
+
+bool Exercise3Scene::EnemyNear(Vector2D agent, Vector2D enemy)
+{
+	return Vector2D::Distance(pix2cell(agent), pix2cell(enemy)) < MIN_ENEMY_DIST;
 }

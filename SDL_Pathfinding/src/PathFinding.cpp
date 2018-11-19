@@ -31,7 +31,7 @@ std::map<Node*, Node*> PathFinding::BreadthFirstSearch( Node * start, Node * goa
 		//std::cout << "current BFS: " << current->m_cell.x << " " << current->m_cell.y << std::endl;
 		if (current == goal)
 		{
-			//early access
+			//early exit
 			return visited;
 		}
 		else
