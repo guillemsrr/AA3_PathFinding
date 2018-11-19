@@ -38,6 +38,7 @@ Exercise2Scene::Exercise2Scene()
 {
 	init();
 
+	CreateRandomWeights();
 	m_graph = new Graph(&terrain);
 	
 	CreatePathToCoin();
@@ -226,7 +227,8 @@ void Exercise2Scene::CreateRandomWeights()
 	{
 		for (int j = 0; j < num_cell_y; j++)//columns
 		{
-			if (terrain[j][i] == 1)
+			int x = rand() % 100;
+			if (terrain[j][i] == 1 && x < 40)
 				terrain[j][i] = MIN_WEIGHT + rand() % (MAX_WEIGHT - MIN_WEIGHT + 1);
 		}
 	}
