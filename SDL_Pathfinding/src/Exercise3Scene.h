@@ -60,5 +60,6 @@ private:
 	void PaintVisitedNodes();
 	std::vector<Vector2D>visitedNodesPosition;
 	bool EnemyNear(Vector2D agent, Vector2D enemy);
+	void ChangeEnemyWeights(Vector2D enemyPos);
 };
 

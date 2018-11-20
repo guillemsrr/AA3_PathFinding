@@ -1,5 +1,7 @@
 #include "Exercise3Scene.h"
 
+std::vector<Edge*> lastFrame;
+std::vector<int> lasWeights;
 
 void Exercise3Scene::init()
 {
@@ -99,19 +101,26 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 	}
 
 	////ENEMY
-	//steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
-	//agents[1]->update(steering_force, dtime, event);
+	steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
+	agents[1]->update(steering_force, dtime, event);
 
-	//// if we have arrived to the coin, replace it in a random cell!
-	//if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
-	//{
-	//	randomEnemyPosition = Vector2D(-1, -1);
-	//	while ((!isValidCell(randomEnemyPosition)) || (Vector2D::Distance(randomEnemyPosition, pix2cell(agents[1]->getPosition())) < 3))
-	//		randomEnemyPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
+	// if we have arrived to the coin, replace it in a random cell!
+	if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
+	{
+		randomEnemyPosition = Vector2D(-1, -1);
+		while ((!isValidCell(randomEnemyPosition)) || (Vector2D::Distance(randomEnemyPosition, pix2cell(agents[1]->getPosition())) < 3))
+			randomEnemyPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 
-	//	//compute new path
-	//	CreateEnemyPath();
-	//}
+		//compute new path
+		CreateEnemyPath();
+	}
+
+	//Reasign weights around the enemy
+	Vector2D posEnemy = pix2cell(agents[1]->getPosition());
+	//std::cout << posEnemy.x << "," << posEnemy.y << std::endl;
+	ChangeEnemyWeights(posEnemy);
+
+
 }
 
 
@@ -359,4 +368,48 @@ void Exercise3Scene::PaintVisitedNodes()
 bool Exercise3Scene::EnemyNear(Vector2D agent, Vector2D enemy)
 {
 	return Vector2D::Distance(pix2cell(agent), pix2cell(enemy)) < MIN_ENEMY_DIST;
+}
+
+void Exercise3Scene::ChangeEnemyWeights(Vector2D enemyPos)
+{
+	std::map<std::pair<int, int>, Node*>::iterator it;
+	Node* current;
+	std::vector<Node*> adyacientes;
+	std::map<std::pair<Node*, Node*>, Edge*>::iterator it2;
+
+	//Reestablecer los pesos del paso anterior
+	if (lastFrame.size() > 0)
+	{
+		for (int i = 0; i < lastFrame.size(); i++)
+		{
+			lastFrame[i]->weight = lasWeights[i];
+		}
+
+		lastFrame.clear();
+		lasWeights.clear();
+	}
+
+	//Buscar todos los nodos adyacentes del nodo actual del enemigo
+	it=m_graph->nodesMap.find(std::make_pair(enemyPos.x, enemyPos.y));
+	if (it != m_graph->nodesMap.end())
+	{
+		current = it->second;
+
+		for (int i = 0; i<it->second->adjacencyList.size(); i++)
+		{
+			adyacientes.push_back(it->second->adjacencyList[i]);
+		}
+
+		//Buscar todos los edges que salen de este nodo y modificarles el peso
+		for (int i = 0; i < adyacientes.size(); i++)
+		{
+			it2 = m_graph->edgesMap.find(std::make_pair(current, adyacientes[i]));
+			lastFrame.push_back(it2->second);
+			lasWeights.push_back(it2->second->weight);
+			it2->second->weight *= 10;
+		}
+	}
+	
+
+
 }
