@@ -20,12 +20,10 @@ private:
 	Vector2D velocity;
 	Vector2D target;
 
-	Path path;
 	int currentTargetIndex;
 
 	float mass;
 	float orientation;
-	float max_force;
 	float max_velocity;
 
 	SDL_Color color;
@@ -36,9 +34,16 @@ private:
 	int sprite_w;
 	int sprite_h;
 
+
 public:
 	Agent();
 	~Agent();
+
+	float max_force;
+	bool enemy;
+
+	Path path;
+
 	void addPathPoint(Vector2D point);
 	int getCurrentTargetIndex();
 	void setCurrentTargetIndex(int idx);
@@ -50,6 +55,7 @@ public:
 	void setPosition(Vector2D position);
 	void setTarget(Vector2D target);
 	void setVelocity(Vector2D velocity);
+	void Agent::setMaxVelocity(float maxvel);
 	void setMass(float mass);
 	void setColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	void update(Vector2D steering_force, float dtime, SDL_Event *event);

@@ -7,15 +7,16 @@ Agent::Agent() : sprite_texture(0),
 	             target(Vector2D(1000, 100)),
 	             velocity(Vector2D(0,0)),
 	             mass(0.1f),
-	             max_force(150),
-	             max_velocity(200),
+	             max_force(2000),//150 //2000
+	             max_velocity(1000),//200 //1000
 	             orientation(0),
 	             color({ 255,255,255,255 }),
 				 sprite_num_frames(0),
 	             sprite_w(0),
 	             sprite_h(0),
 	             draw_sprite(false),
-				 currentTargetIndex(-1)
+				 currentTargetIndex(-1),
+				 enemy(false)
 {
 	steering_behavior = new SteeringBehavior;
 }
@@ -87,6 +88,11 @@ void Agent::setVelocity(Vector2D _velocity)
 	velocity = _velocity;
 }
 
+void Agent::setMaxVelocity(float maxvel)
+{
+	max_velocity = maxvel;
+}
+
 void Agent::setMass(float _mass)
 {
 	mass = _mass;
@@ -129,11 +135,23 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 
 void Agent::draw()
 {
-	for (int i = 0; i < (int)path.points.size(); i++)
+	if (!enemy)
 	{
-		draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
-		if (i > 0)
-			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		for (int i = 0; i < (int)path.points.size(); i++)
+		{
+			draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
+			if (i > 0)
+				SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		}
+	}
+	else
+	{
+		for (int i = 0; i < (int)path.points.size(); i++)
+		{
+			draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 15, 255, 0, 255);
+			if (i > 0)
+				SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		}
 	}
 
 	draw_circle(TheApp::Instance()->getRenderer(), (int)target.x, (int)target.y, 15, 255, 0, 0, 255);

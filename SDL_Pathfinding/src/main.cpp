@@ -4,6 +4,9 @@
 
 #include "SDL_SimpleApp.h"
 #include "ScenePathFindingMouse.h"
+#include "Exercise1Scene.h"
+#include "Exercise2Scene.h"
+#include "Exercise3Scene.h"
 
 using namespace std;
 
@@ -16,7 +19,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new ScenePathFindingMouse;
+	Scene *curr_scene = new Exercise1Scene(2);
 	app->setWindowTitle(curr_scene->getTitle());
 
 	
@@ -48,11 +51,41 @@ int main(int argc, char ** argv)
 				curr_scene = new ScenePathFindingMouse;
 				app->setWindowTitle(curr_scene->getTitle());
 			}
-			if (event.key.keysym.scancode == SDL_SCANCODE_2)
+			if (event.key.keysym.scancode == SDL_SCANCODE_2)//Breadth First Search
 			{
+				delete(curr_scene);
+				curr_scene = new Exercise1Scene(2);
+				app->setWindowTitle(curr_scene->getTitle());
 			}
-			if (event.key.keysym.scancode == SDL_SCANCODE_3)
+			if (event.key.keysym.scancode == SDL_SCANCODE_3)//Dijkstra
 			{
+				delete(curr_scene);
+				curr_scene = new Exercise1Scene(3);
+				app->setWindowTitle(curr_scene->getTitle());
+			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_4)//Greedy
+			{
+				delete(curr_scene);
+				curr_scene = new Exercise1Scene(4);
+				app->setWindowTitle(curr_scene->getTitle());
+			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_5)//A*
+			{
+				delete(curr_scene);
+				curr_scene = new Exercise1Scene(5);
+				app->setWindowTitle(curr_scene->getTitle());
+			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_6)//Exercici 2 A*
+			{
+				delete(curr_scene);
+				curr_scene = new Exercise2Scene();
+				app->setWindowTitle(curr_scene->getTitle());
+			}
+			if (event.key.keysym.scancode == SDL_SCANCODE_7)//Exercici 3 D*
+			{
+				delete(curr_scene);
+				curr_scene = new Exercise3Scene();
+				app->setWindowTitle(curr_scene->getTitle());
 			}
 			if ((event.key.keysym.scancode == SDL_SCANCODE_Q) || (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE))
 			{
