@@ -16,12 +16,16 @@ void Exercise3Scene::init()
 	Agent *agent = new Agent;
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agent->setTarget(Vector2D(-20, -20));
+	//agent->setMaxVelocity(200);
+	//agent->max_force = 150;
 	agents.push_back(agent);
 
 	Agent *agent2 = new Agent;
 	agent2->loadSpriteTexture("../res/zombie1.png", 4);
 	agent2->setTarget(Vector2D(-20, -20));
-	agent2->setMaxVelocity(300);
+	//agent2->setMaxVelocity(200);
+	//agent2->max_force = 150;
+	agent2->enemy = true;
 	agents.push_back(agent2);
 
 	// set agent position coords to the center of a random cell
@@ -39,6 +43,8 @@ void Exercise3Scene::init()
 	coinPosition = Vector2D(-1, -1);
 	while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, rand_cell) < 3))
 		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
+
+	near = false;
 }
 
 Exercise3Scene::Exercise3Scene()
@@ -76,12 +82,26 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph))
+	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph) && !near)
 	{
 		std::cout << "Enemy Near" << std::endl;
+		near = true;
 		agents[0]->path.points.clear();
 		agents[0]->setCurrentTargetIndex(-1);
+		//Reasign weights around the enemy
+		//Vector2D posEnemy = pix2cell(agents[1]->getPosition());
+		//std::cout << posEnemy.x << "," << posEnemy.y << std::endl;
+		//ChangeEnemyWeights(posEnemy);
+
+		ChangeEnemyWeights2();
 		CreatePathToCoin();
+	}
+	if (!EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph) && near)
+	{
+		std::cout << "Enemy Far" << std::endl;
+		near = false;
+
+		RestartWeights();
 	}
 
 	//AGENT
@@ -103,7 +123,7 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 	steering_force = agents[1]->Behavior()->SimplePathFollowing(agents[1], dtime);
 	agents[1]->update(steering_force, dtime, event);
 
-	// if we have arrived to the coin, replace it in a random cell!
+	// if we have arrived to the new position, replace it in a random cell!
 	if ((agents[1]->getCurrentTargetIndex() == -1) && (pix2cell(agents[1]->getPosition()) == randomEnemyPosition))
 	{
 		randomEnemyPosition = Vector2D(-1, -1);
@@ -113,12 +133,6 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		//compute new path
 		CreateEnemyPath();
 	}
-
-	//Reasign weights around the enemy
-	Vector2D posEnemy = pix2cell(agents[1]->getPosition());
-	//std::cout << posEnemy.x << "," << posEnemy.y << std::endl;
-	ChangeEnemyWeights(posEnemy);
-
 }
 
 
@@ -155,7 +169,7 @@ const char* Exercise3Scene::getTitle()
 	std::string title = "SDL Path Finding :: Exercise 1 ";
 	//title.append(algorithmTitle);
 	//return title.c_str();//no funciona
-	return "SDL Path Finding :: Exercise 1 ";
+	return "SDL Path Finding :: Exercise 3 ";
 }
 
 void Exercise3Scene::drawMaze()
@@ -317,7 +331,6 @@ void Exercise3Scene::CreateEnemyPath()
 	visited = PathFinding::GreedyBestFirstSearch(m_graph, enemyNode, randomNode);
 
 	SetRandomPath(visited, randomNode);
-
 }
 
 std::pair<int, int> Exercise3Scene::Cell2Pair(Vector2D cell)
@@ -415,3 +428,69 @@ void Exercise3Scene::ChangeEnemyWeights(Vector2D enemyPos)
 		}
 	}
  }
+
+void Exercise3Scene::ChangeEnemyWeights2()
+{
+	Vector2D agentCell = pix2cell(agents[1]->getPosition());
+	Node* enemyNode = m_graph->nodesMap.at(Cell2Pair(agentCell));
+	terrain[enemyNode->m_cell.y][enemyNode->m_cell.x] = MAX_WEIGHT;
+	for each(Node* n in enemyNode->adjacencyList)
+	{
+		terrain[n->m_cell.y][n->m_cell.x] = MAX_WEIGHT;
+		if (m_graph->edgesMap[std::make_pair(enemyNode, n)]->weight != MAX_WEIGHT)
+		{
+			m_graph->edgesMap[std::make_pair(enemyNode, n)]->weight = MAX_WEIGHT;
+			m_graph->edgesMap[std::make_pair(n, enemyNode)]->weight = MAX_WEIGHT;
+		}
+		for each(Node* n2 in n->adjacencyList)
+		{
+			terrain[n2->m_cell.y][n2->m_cell.x] = MAX_WEIGHT;
+			if (m_graph->edgesMap[std::make_pair(n, n2)]->weight != MAX_WEIGHT)
+			{
+				m_graph->edgesMap[std::make_pair(n, n2)]->weight = MAX_WEIGHT;
+				m_graph->edgesMap[std::make_pair(n2, n)]->weight = MAX_WEIGHT;
+
+			}
+			for each(Node* n3 in n2->adjacencyList)
+			{
+				terrain[n3->m_cell.y][n3->m_cell.x] = MAX_WEIGHT;
+				if (m_graph->edgesMap[std::make_pair(n2, n3)]->weight != MAX_WEIGHT)
+				{
+					m_graph->edgesMap[std::make_pair(n2, n3)]->weight = MAX_WEIGHT;
+					m_graph->edgesMap[std::make_pair(n3, n2)]->weight = MAX_WEIGHT;
+				}
+				for each(Node* n4 in n3->adjacencyList)
+				{
+					terrain[n4->m_cell.y][n4->m_cell.x] = MAX_WEIGHT;
+					if (m_graph->edgesMap[std::make_pair(n3, n4)]->weight != MAX_WEIGHT)
+					{
+						m_graph->edgesMap[std::make_pair(n3, n4)]->weight = MAX_WEIGHT;
+						m_graph->edgesMap[std::make_pair(n4, n3)]->weight = MAX_WEIGHT;
+					}
+				}
+			}
+		}
+	}
+}
+
+void Exercise3Scene::RestartWeights()
+{
+	for (auto& edge: m_graph->edgesMap)
+	{
+		if (edge.second->weight != 1)
+		{
+			edge.second->weight == 1;
+		}
+	}
+
+	//TERRAIN:
+	for (int row = 0; row < num_cell_y; row++)
+	{
+		for (int col = 0; col < num_cell_x; col++)
+		{
+			if (terrain[row][col] > 1)
+				terrain[row][col] = 1;
+		}
+	}
+
+}

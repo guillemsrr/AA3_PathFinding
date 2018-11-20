@@ -15,7 +15,8 @@ Agent::Agent() : sprite_texture(0),
 	             sprite_w(0),
 	             sprite_h(0),
 	             draw_sprite(false),
-				 currentTargetIndex(-1)
+				 currentTargetIndex(-1),
+				 enemy(false)
 {
 	steering_behavior = new SteeringBehavior;
 }
@@ -134,11 +135,23 @@ void Agent::update(Vector2D steering_force, float dtime, SDL_Event *event)
 
 void Agent::draw()
 {
-	for (int i = 0; i < (int)path.points.size(); i++)
+	if (!enemy)
 	{
-		draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
-		if (i > 0)
-			SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		for (int i = 0; i < (int)path.points.size(); i++)
+		{
+			draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 255, 255, 0, 255);
+			if (i > 0)
+				SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		}
+	}
+	else
+	{
+		for (int i = 0; i < (int)path.points.size(); i++)
+		{
+			draw_circle(TheApp::Instance()->getRenderer(), (int)(path.points[i].x), (int)(path.points[i].y), 15, 15, 255, 0, 255);
+			if (i > 0)
+				SDL_RenderDrawLine(TheApp::Instance()->getRenderer(), (int)(path.points[i - 1].x), (int)(path.points[i - 1].y), (int)(path.points[i].x), (int)(path.points[i].y));
+		}
 	}
 
 	draw_circle(TheApp::Instance()->getRenderer(), (int)target.x, (int)target.y, 15, 255, 0, 0, 255);

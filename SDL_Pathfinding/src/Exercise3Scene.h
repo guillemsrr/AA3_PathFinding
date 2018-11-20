@@ -47,7 +47,7 @@ private:
 	Graph* m_graph;
 	const int MAX_WEIGHT = 6;
 	const int MIN_WEIGHT = 1;
-	const int MIN_ENEMY_DIST = 3;
+	const int MIN_ENEMY_DIST = 6;
 	void CreateRandomWeights();
 	void CreateSpecificWeights();
 	Node* coinNode;
@@ -62,5 +62,8 @@ private:
 	bool EnemyNear(Vector2D agentPos, Vector2D enemyPos);
 	bool IsInNode(Agent* agent, Graph* graph);
 	void ChangeEnemyWeights(Vector2D enemyPos);
+	void ChangeEnemyWeights2();
+	void RestartWeights();
+	bool near;
 };
 

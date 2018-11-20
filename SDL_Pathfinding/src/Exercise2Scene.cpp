@@ -108,10 +108,7 @@ void Exercise2Scene::draw()
 
 const char* Exercise2Scene::getTitle()
 {
-	std::string title = "SDL Path Finding :: Exercise 1 ";
-	//title.append(algorithmTitle);
-	//return title.c_str();//no funciona
-	return "SDL Path Finding :: Exercise 1 ";
+	return "SDL Path Finding :: Exercise 2 ";
 }
 
 void Exercise2Scene::drawMaze()

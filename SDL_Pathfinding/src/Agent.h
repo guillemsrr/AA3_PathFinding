@@ -24,7 +24,6 @@ private:
 
 	float mass;
 	float orientation;
-	float max_force;
 	float max_velocity;
 
 	SDL_Color color;
@@ -35,9 +34,13 @@ private:
 	int sprite_w;
 	int sprite_h;
 
+
 public:
 	Agent();
 	~Agent();
+
+	float max_force;
+	bool enemy;
 
 	Path path;
 
