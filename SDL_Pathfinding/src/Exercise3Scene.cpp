@@ -16,6 +16,7 @@ void Exercise3Scene::init()
 	Agent *agent = new Agent;
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agent->setTarget(Vector2D(-20, -20));
+	agent->setMaxVelocity(300);
 	agents.push_back(agent);
 
 	Agent *agent2 = new Agent;
@@ -75,12 +76,11 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	if (/*EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) &&*/ !flag)
+	if (/*EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) &&*/ !flag && IsInNode(agents[0], m_graph))
 	{
 		std::cout << "Enemy Near" << std::endl;
 		agents[0]->path.points.clear();
 		agents[0]->setCurrentTargetIndex(-1);
-		agents[0]->setVelocity(Vector2D(0, 0));
 		CreatePathToCoin();
 		flag = true;
 	}
@@ -365,9 +365,16 @@ void Exercise3Scene::PaintVisitedNodes()
 	}
 }
 
-bool Exercise3Scene::EnemyNear(Vector2D agent, Vector2D enemy)
+bool Exercise3Scene::EnemyNear(Vector2D agentPos, Vector2D enemyPos)
 {
-	return Vector2D::Distance(pix2cell(agent), pix2cell(enemy)) < MIN_ENEMY_DIST;
+	return Vector2D::Distance(pix2cell(agentPos), pix2cell(enemyPos)) < MIN_ENEMY_DIST;
+}
+
+bool Exercise3Scene::IsInNode(Agent* agent, Graph * graph)
+{
+	Vector2D agentCell = pix2cell(agent->getPosition());
+
+	return graph->nodesMap.count(Cell2Pair(agentCell)) > 0;
 }
 
 void Exercise3Scene::ChangeEnemyWeights(Vector2D enemyPos)
