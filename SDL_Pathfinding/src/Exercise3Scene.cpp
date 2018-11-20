@@ -479,7 +479,7 @@ void Exercise3Scene::RestartWeights()
 	{
 		if (edge.second->weight != 1)
 		{
-			edge.second->weight == 1;
+			edge.second->weight = 1;
 		}
 	}
 
