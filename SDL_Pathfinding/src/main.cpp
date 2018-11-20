@@ -19,7 +19,7 @@ int main(int argc, char ** argv)
 
 	SDL_SimpleApp *app = SDL_SimpleApp::Instance();
 
-	Scene *curr_scene = new Exercise2Scene();
+	Scene *curr_scene = new Exercise1Scene(2);
 	app->setWindowTitle(curr_scene->getTitle());
 
 	
@@ -94,10 +94,6 @@ int main(int argc, char ** argv)
 			if (event.key.keysym.scancode == SDL_SCANCODE_F)
 			{
 				app->setFullScreen();
-			}
-			if (event.key.keysym.scancode == SDL_SCANCODE_J)
-			{
-				curr_scene->flag = false;
 			}
 			break;
 		case SDL_QUIT:

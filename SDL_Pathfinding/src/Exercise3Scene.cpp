@@ -16,12 +16,12 @@ void Exercise3Scene::init()
 	Agent *agent = new Agent;
 	agent->loadSpriteTexture("../res/soldier.png", 4);
 	agent->setTarget(Vector2D(-20, -20));
-	agent->setMaxVelocity(300);
 	agents.push_back(agent);
 
 	Agent *agent2 = new Agent;
 	agent2->loadSpriteTexture("../res/zombie1.png", 4);
 	agent2->setTarget(Vector2D(-20, -20));
+	agent2->setMaxVelocity(300);
 	agents.push_back(agent2);
 
 	// set agent position coords to the center of a random cell
@@ -76,13 +76,12 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	if (/*EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) &&*/ !flag && IsInNode(agents[0], m_graph))
+	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph))
 	{
 		std::cout << "Enemy Near" << std::endl;
 		agents[0]->path.points.clear();
 		agents[0]->setCurrentTargetIndex(-1);
 		CreatePathToCoin();
-		flag = true;
 	}
 
 	//AGENT
@@ -93,7 +92,7 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 	if ((agents[0]->getCurrentTargetIndex() == -1) && (pix2cell(agents[0]->getPosition()) == coinPosition))
 	{
 		coinPosition = Vector2D(-1, -1);
-		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 10))
+		while ((!isValidCell(coinPosition)) || (Vector2D::Distance(coinPosition, pix2cell(agents[0]->getPosition())) < 5))
 			coinPosition = Vector2D((float)(rand() % num_cell_y), (float)(rand() % num_cell_x));
 
 		//compute new path
@@ -119,7 +118,6 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 	Vector2D posEnemy = pix2cell(agents[1]->getPosition());
 	//std::cout << posEnemy.x << "," << posEnemy.y << std::endl;
 	ChangeEnemyWeights(posEnemy);
-
 
 }
 
@@ -381,7 +379,7 @@ void Exercise3Scene::ChangeEnemyWeights(Vector2D enemyPos)
 {
 	std::map<std::pair<int, int>, Node*>::iterator it;
 	Node* current;
-	std::vector<Node*> adyacientes;
+	std::vector<Node*> adyacentes;
 	std::map<std::pair<Node*, Node*>, Edge*>::iterator it2;
 
 	//Reestablecer los pesos del paso anterior
@@ -404,19 +402,16 @@ void Exercise3Scene::ChangeEnemyWeights(Vector2D enemyPos)
 
 		for (int i = 0; i<it->second->adjacencyList.size(); i++)
 		{
-			adyacientes.push_back(it->second->adjacencyList[i]);
+			adyacentes.push_back(it->second->adjacencyList[i]);
 		}
 
 		//Buscar todos los edges que salen de este nodo y modificarles el peso
-		for (int i = 0; i < adyacientes.size(); i++)
+		for (int i = 0; i < adyacentes.size(); i++)
 		{
-			it2 = m_graph->edgesMap.find(std::make_pair(current, adyacientes[i]));
+			it2 = m_graph->edgesMap.find(std::make_pair(current, adyacentes[i]));
 			lastFrame.push_back(it2->second);
 			lasWeights.push_back(it2->second->weight);
 			it2->second->weight *= 10;
 		}
 	}
-	
-
-
-}
+ }
