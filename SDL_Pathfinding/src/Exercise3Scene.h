@@ -59,6 +59,7 @@ private:
 	void GetVisitedNodesPosition(std::map<Node*, Node*> visited);
 	void PaintVisitedNodes();
 	std::vector<Vector2D>visitedNodesPosition;
-	bool EnemyNear(Vector2D agent, Vector2D enemy);
+	bool EnemyNear(Vector2D agentPos, Vector2D enemyPos);
+	bool IsInNode(Agent* agent, Graph* graph);
 };
 

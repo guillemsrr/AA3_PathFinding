@@ -87,6 +87,11 @@ void Agent::setVelocity(Vector2D _velocity)
 	velocity = _velocity;
 }
 
+void Agent::setMaxVelocity(float maxvel)
+{
+	max_velocity = maxvel;
+}
+
 void Agent::setMass(float _mass)
 {
 	mass = _mass;
