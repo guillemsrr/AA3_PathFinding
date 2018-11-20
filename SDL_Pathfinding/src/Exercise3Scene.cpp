@@ -45,6 +45,7 @@ void Exercise3Scene::init()
 		coinPosition = Vector2D((float)(rand() % num_cell_x), (float)(rand() % num_cell_y));
 
 	near = false;
+	frames = 0;
 }
 
 Exercise3Scene::Exercise3Scene()
@@ -82,25 +83,22 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		break;
 	}
 
-	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph) && !near)
+	if (EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph))
 	{
-		std::cout << "Enemy Near" << std::endl;
-		near = true;
-		agents[0]->path.points.clear();
-		agents[0]->setCurrentTargetIndex(-1);
-		//Reasign weights around the enemy
-		//Vector2D posEnemy = pix2cell(agents[1]->getPosition());
-		//std::cout << posEnemy.x << "," << posEnemy.y << std::endl;
-		//ChangeEnemyWeights(posEnemy);
+		if (frames % 25 == 0)
+		{
+			std::cout << "Enemy Near" << std::endl;
+			near = true;
+			agents[0]->path.points.clear();
+			agents[0]->setCurrentTargetIndex(-1);
 
-		ChangeEnemyWeights2();
-		CreatePathToCoin();
+			ChangeEnemyWeights2();
+			CreatePathToCoin();
+		}
+		
 	}
-	if (!EnemyNear(agents[0]->getPosition(), agents[1]->getPosition()) && IsInNode(agents[0], m_graph) && near)
+	else 
 	{
-		std::cout << "Enemy Far" << std::endl;
-		near = false;
-
 		RestartWeights();
 	}
 
@@ -133,6 +131,8 @@ void Exercise3Scene::update(float dtime, SDL_Event *event)
 		//compute new path
 		CreateEnemyPath();
 	}
+
+	frames++;
 }
 
 

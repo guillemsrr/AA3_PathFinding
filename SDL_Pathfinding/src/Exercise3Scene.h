@@ -65,5 +65,6 @@ private:
 	void ChangeEnemyWeights2();
 	void RestartWeights();
 	bool near;
+	int frames;
 };
 
